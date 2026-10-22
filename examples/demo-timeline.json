@@ -1,0 +1,237 @@
+{
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "showProgressBar": true,
+  "showSafeArea": false,
+  "captionStyle": {
+    "fontSize": 54,
+    "textColor": "#ffffff",
+    "highlightColor": "#facc15",
+    "boxColor": "rgba(15, 23, 42, 0.88)",
+    "positionBottom": 420,
+    "maxCharsPerLine": 24,
+    "maxLines": 2
+  },
+  "scenes": [
+    {
+      "id": "scene-1-mystery",
+      "start": 0.0,
+      "end": 4.0,
+      "background": "linear-gradient(180deg, #0f172a 0%, #1e293b 100%)",
+      "title": "The Hot Tea Mystery",
+      "mascot": {
+        "pose": "thinking",
+        "x": 540,
+        "y": 1320,
+        "scale": 1.15,
+        "flip": false
+      },
+      "elements": [
+        {
+          "type": "callout",
+          "id": "intro-callout",
+          "x": 540,
+          "y": 660,
+          "title": "Steaming Fresh",
+          "text": "How does a flask keep tea piping hot for 12 hours?",
+          "accentColor": "#f59e0b"
+        }
+      ]
+    },
+    {
+      "id": "scene-2-escape-routes",
+      "start": 4.0,
+      "end": 8.5,
+      "background": "linear-gradient(180deg, #1e1b4b 0%, #0f172a 100%)",
+      "title": "3 Ways Heat Escapes",
+      "mascot": {
+        "pose": "explaining",
+        "x": 780,
+        "y": 1350,
+        "scale": 1.05,
+        "flip": false
+      },
+      "elements": [
+        {
+          "type": "callout",
+          "id": "heat-loss-callout",
+          "x": 380,
+          "y": 560,
+          "title": "Heat Transfer",
+          "text": "Heat naturally escapes by conduction, convection, and radiation.",
+          "accentColor": "#38bdf8"
+        },
+        {
+          "type": "arrow",
+          "id": "heat-loss-arrow",
+          "fromX": 740,
+          "fromY": 1200,
+          "toX": 420,
+          "toY": 680,
+          "label": "Loss vectors",
+          "color": "#38bdf8",
+          "curvature": -40
+        }
+      ]
+    },
+    {
+      "id": "scene-3-vacuum-wall",
+      "start": 8.5,
+      "end": 13.5,
+      "background": "linear-gradient(180deg, #022c22 0%, #0f172a 100%)",
+      "title": "The Vacuum Barrier",
+      "mascot": {
+        "pose": "talking",
+        "x": 300,
+        "y": 1350,
+        "scale": 1.05,
+        "flip": true
+      },
+      "elements": [
+        {
+          "type": "callout",
+          "id": "vacuum-callout",
+          "x": 680,
+          "y": 600,
+          "title": "Zero Molecules",
+          "text": "Double glass walls with an empty vacuum in between.",
+          "accentColor": "#10b981"
+        },
+        {
+          "type": "arrow",
+          "id": "vacuum-arrow",
+          "fromX": 340,
+          "fromY": 1200,
+          "toX": 620,
+          "toY": 700,
+          "label": "No air to transfer heat",
+          "color": "#10b981",
+          "curvature": 30
+        },
+        {
+          "type": "zoom",
+          "id": "vacuum-zoom",
+          "targetX": 680,
+          "targetY": 600,
+          "scale": 1.15
+        }
+      ]
+    },
+    {
+      "id": "scene-4-silvered-mirrors",
+      "start": 13.5,
+      "end": 17.5,
+      "background": "linear-gradient(180deg, #311042 0%, #0f172a 100%)",
+      "title": "Mirrored Silver Lining",
+      "mascot": {
+        "pose": "explaining",
+        "x": 760,
+        "y": 1320,
+        "scale": 1.1,
+        "flip": false
+      },
+      "elements": [
+        {
+          "type": "callout",
+          "id": "mirror-callout",
+          "x": 400,
+          "y": 620,
+          "title": "Infrared Reflection",
+          "text": "Silver mirrored lining bounces infrared thermal radiation back in.",
+          "accentColor": "#e879f9"
+        },
+        {
+          "type": "arrow",
+          "id": "mirror-arrow",
+          "fromX": 720,
+          "fromY": 1180,
+          "toX": 450,
+          "toY": 720,
+          "label": "Radiation reflects",
+          "color": "#e879f9",
+          "curvature": -30
+        }
+      ]
+    },
+    {
+      "id": "scene-5-conclusion",
+      "start": 17.5,
+      "end": 20.0,
+      "background": "linear-gradient(180deg, #1e3a8a 0%, #0f172a 100%)",
+      "title": "Perfect Heat Trap",
+      "mascot": {
+        "pose": "surprised",
+        "x": 540,
+        "y": 1280,
+        "scale": 1.2,
+        "flip": false
+      },
+      "elements": [
+        {
+          "type": "callout",
+          "id": "conclusion-callout",
+          "x": 540,
+          "y": 580,
+          "title": "Hot Tea All Day",
+          "text": "Vacuum stops conduction. Mirrors stop radiation. Heat is trapped!",
+          "accentColor": "#facc15"
+        }
+      ]
+    }
+  ],
+  "captions": [
+    { "text": "Ever", "start": 0.15, "end": 0.45 },
+    { "text": "wondered", "start": 0.45, "end": 0.95 },
+    { "text": "how", "start": 0.95, "end": 1.2 },
+    { "text": "a", "start": 1.2, "end": 1.35 },
+    { "text": "thermos", "start": 1.35, "end": 1.85 },
+    { "text": "keeps", "start": 1.85, "end": 2.25 },
+    { "text": "tea", "start": 2.25, "end": 2.65 },
+    { "text": "piping", "start": 2.65, "end": 3.1 },
+    { "text": "hot?", "start": 3.1, "end": 3.75 },
+
+    { "text": "Heat", "start": 4.1, "end": 4.5 },
+    { "text": "naturally", "start": 4.5, "end": 5.0 },
+    { "text": "escapes", "start": 5.0, "end": 5.45 },
+    { "text": "in", "start": 5.45, "end": 5.65 },
+    { "text": "three", "start": 5.65, "end": 6.0 },
+    { "text": "ways:", "start": 6.0, "end": 6.45 },
+    { "text": "conduction,", "start": 6.55, "end": 7.15 },
+    { "text": "convection,", "start": 7.15, "end": 7.75 },
+    { "text": "and", "start": 7.75, "end": 7.95 },
+    { "text": "radiation.", "start": 7.95, "end": 8.45 },
+
+    { "text": "A", "start": 8.65, "end": 8.85 },
+    { "text": "thermos", "start": 8.85, "end": 9.3 },
+    { "text": "uses", "start": 9.3, "end": 9.6 },
+    { "text": "double", "start": 9.6, "end": 10.0 },
+    { "text": "walls", "start": 10.0, "end": 10.4 },
+    { "text": "with", "start": 10.4, "end": 10.65 },
+    { "text": "a", "start": 10.65, "end": 10.8 },
+    { "text": "vacuum", "start": 10.8, "end": 11.25 },
+    { "text": "between.", "start": 11.25, "end": 11.7 },
+    { "text": "No", "start": 11.9, "end": 12.15 },
+    { "text": "air", "start": 12.15, "end": 12.4 },
+    { "text": "means", "start": 12.4, "end": 12.75 },
+    { "text": "zero", "start": 12.75, "end": 13.1 },
+    { "text": "conduction!", "start": 13.1, "end": 13.48 },
+
+    { "text": "And", "start": 13.6, "end": 13.8 },
+    { "text": "silver", "start": 13.8, "end": 14.2 },
+    { "text": "mirrors", "start": 14.2, "end": 14.65 },
+    { "text": "bounce", "start": 14.65, "end": 15.05 },
+    { "text": "radiation", "start": 15.05, "end": 15.65 },
+    { "text": "right", "start": 15.65, "end": 15.95 },
+    { "text": "back", "start": 15.95, "end": 16.3 },
+    { "text": "inside.", "start": 16.3, "end": 16.8 },
+
+    { "text": "Trapped", "start": 17.55, "end": 17.95 },
+    { "text": "heat", "start": 17.95, "end": 18.25 },
+    { "text": "equals", "start": 18.25, "end": 18.65 },
+    { "text": "steaming", "start": 18.65, "end": 19.1 },
+    { "text": "tea", "start": 19.1, "end": 19.4 },
+    { "text": "all", "start": 19.4, "end": 19.65 },
+    { "text": "day!", "start": 19.65, "end": 20.0 }
+  ]
+}
