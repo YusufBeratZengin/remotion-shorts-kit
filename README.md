@@ -16,9 +16,9 @@ Producing mechanism-explainer shorts programmatically is popular across YouTube 
 - **Word-Level Animated Captions**: Synchronized to word timestamps with dynamic 1-2 line batching, pause detection, safe-area elevation, and active word pop highlights.
 - **SVG Mascot System**: Original geometric robot mascot ("Pip") with 5 distinct poses (`idle`, `talking`, `explaining`, `thinking`, `surprised`) and squash/bounce entrance dynamics.
 - **Visual Callouts and Pointers**: `<Callout>` spring cards, `<Arrow>` bezier pointers with attention pulses, and `<ZoomTo>` camera pan-and-scale effects.
-- **Platform Safe Area Guides**: Visual guidelines for YouTube Shorts, TikTok, and Instagram Reels to prevent UI button overlap.
-- **Pure Helpers with Complete Test Coverage**: Standalone units for time-to-frame calculation, line breaking, scene lookup, and easing curves.
-- **Production Render Pipeline**: Fully configured CLI scripts for studio inspection and high-concurrency MP4 exports.
+- **Safe Area Guide**: A Studio-only overlay (`<SafeAreaOverlay>`) showing a conservative zone that avoids typical Shorts/TikTok/Reels UI. It is hidden in `remotion render` output unless you opt in with `showInRender`. The `platform` prop only changes the label; the geometry is one shared, conservative layout.
+- **Unit-Tested Pure Helpers**: Standalone units for time-to-frame calculation, line breaking, scene lookup, and easing curves.
+- **Render Pipeline**: npm scripts for Studio inspection and MP4 export through the Remotion CLI. Composition length, fps and size are derived from the timeline.
 
 ## Quick Start
 
@@ -83,7 +83,7 @@ The rendering pipeline is driven by a `Timeline` object. The full schema is defi
 | `audio` | `AudioConfig` | `undefined` | Optional background or narration audio track. |
 | `captionStyle`| `CaptionStyle`| `{}` | Global typography and visual style for subtitles. |
 | `showProgressBar` | `boolean` | `true` | Display progress bar indicator at top or bottom. |
-| `showSafeArea` | `boolean` | `false` | Display platform UI safe area overlays. |
+| `showSafeArea` | `boolean` | `false` | Show the safe-area guide in Studio/Player (never in `remotion render` output). |
 
 ### Scene Definition
 
@@ -209,6 +209,7 @@ Guides for vertical platform interfaces.
 | `visible` | `boolean` | `false` | Whether overlay is rendered. |
 | `platform` | `SafeAreaPlatform` | `"all"` | `"all"` \| `"youtube-shorts"` \| `"tiktok"` \| `"instagram-reels"`. |
 | `opacity` | `number` | `0.85` | Overlay transparency. |
+| `showInRender` | `boolean` | `false` | Also draw the overlay in `remotion render` / `remotion still` output. |
 
 ## Bring Your Own TTS + Whisper Word Timestamps
 
@@ -279,7 +280,7 @@ Inject the generated word array into your timeline file:
   "width": 1080,
   "height": 1920,
   "audio": {
-    "src": "/narration.mp3",
+    "src": "narration.mp3",
     "volume": 1.0
   },
   "captions": [
@@ -290,7 +291,13 @@ Inject the generated word array into your timeline file:
 }
 ```
 
-Then render using `npm run render:demo` or your custom render command.
+Audio and image paths in the timeline are resolved with Remotion's `staticFile()`, so `"narration.mp3"` (or `"/narration.mp3"`) means `public/narration.mp3`; `http(s)://` URLs are used as-is. Pass a timeline to the `ExplainerShort` composition with `--props`:
+
+```bash
+npx remotion render src/index.ts ExplainerShort out/video.mp4 --props=my-props.json
+```
+
+where `my-props.json` is `{ "timeline": { ... } }`. The video length is taken from the latest scene or caption end.
 
 ## Safe Area Specifications
 
@@ -299,7 +306,7 @@ Vertical short platforms overlay native user interface elements that cover edges
 - **Top Danger Zone (0 to 200px)**: Covered by platform search bars, sound selector tags, and status icons.
 - **Right Danger Rail (920px to 1080px)**: Covered by action icons (Like, Dislike/Save, Comments, Share, Remix, Sound Disc).
 - **Bottom Danger Zone (1440px to 1920px)**: Covered by account profile pictures, follow buttons, titles, audio attributions, and progress scrubbers.
-- **Safe Content Box**: `left: 60px`, `top: 200px`, `right: 180px`, `bottom: 480px`. Keep all critical diagrams, pointer arrows, and character focal points within these bounds. Captions in `remotion-shorts-kit` are elevated to `bottom: 420px` by default to sit cleanly above bottom overlays.
+- **Safe Content Box**: `left: 60px`, `top: 200px`, `right: 180px`, `bottom: 480px`. Keep all critical diagrams, pointer arrows, and character focal points within these bounds. Captions are kept inside that box by default: `positionBottom: 500` and a 180px right margin. The overlay is a development aid only: it is not drawn in final renders by default.
 
 ## Project Structure
 
@@ -324,8 +331,10 @@ remotion-shorts-kit/
 │   ├── examples/               # Example implementations
 │   │   └── ThermosExplainer.tsx
 │   ├── helpers/                # Pure unit-tested algorithms
+│   │   ├── assets.ts
 │   │   ├── captions.ts
 │   │   ├── easing.ts
+│   │   ├── resolveAsset.ts
 │   │   ├── scene.ts
 │   │   └── time.ts
 │   ├── Root.tsx                # Remotion Root composition registrations

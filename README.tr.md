@@ -16,9 +16,9 @@ YouTube Shorts, TikTok ve Instagram Reels için teknik veya bilimsel mekanizmala
 - **Kelime Seviyesinde Animasyonlu Altyazılar**: Kelime zaman damgalarıyla senkronize, akıllı 1-2 satır bölme, duraklama algılama, güvenli alan hizalaması ve aktif kelime vurgulama efekti.
 - **SVG Maskot Sistemi**: Orijinal geometrik robot karakter ("Pip"), 5 farklı poz (`idle`, `talking`, `explaining`, `thinking`, `surprised`) ve esneme/sıçrama giriş dinamikleri.
 - **Görsel Vurgu ve İşaretçiler**: Yay mekanizmalı `<Callout>` bilgi kartları, dikkat çeken titreşimli `<Arrow>` bezier okları ve `<ZoomTo>` kamera odaklama bileşenleri.
-- **Platform Güvenli Alan Kılavuzu**: YouTube Shorts, TikTok ve Instagram Reels arayüz butonlarıyla çakışmayı önleyen görsel kılavuz çizgileri.
+- **Güvenli Alan Kılavuzu**: Shorts/TikTok/Reels arayüzünden kaçınmak için temkinli bir bölgeyi gösteren, yalnız Studio'da görünen katman (`<SafeAreaOverlay>`). `showInRender` ile açıkça istemedikçe `remotion render` çıktısına girmez. `platform` özelliği yalnız etiketi değiştirir; ölçüler ortak ve temkinlidir.
 - **Kapsamlı Test Kapsamına Sahip Saf Yardımcılar**: Zaman-kare dönüşümü, satır bölme, sahne arama ve yumuşatma eğrileri için birim testleri.
-- **Üretime Hazır Render Altyapısı**: Remotion Studio ile canlı inceleme ve yüksek eşzamanlılıklı MP4 dışa aktarma komutları.
+- **Üretime Hazır Render Altyapısı**: Remotion Studio ile canlı inceleme ve Remotion CLI ile MP4 dışa aktarma komutları; kompozisyon süresi, fps ve boyut timeline'dan hesaplanır.
 
 ## Hızlı Başlangıç
 
@@ -83,7 +83,7 @@ Tüm video akışı bir `Timeline` nesnesi ile yönetilir. Şema `src/schema.ts`
 | `audio` | `AudioConfig` | `undefined` | İsteğe bağlı seslendirme veya müzik dosyası. |
 | `captionStyle`| `CaptionStyle`| `{}` | Altyazı tipografi ve görsel stil ayarları. |
 | `showProgressBar` | `boolean` | `true` | Alt veya üst ilerleme çubuğu. |
-| `showSafeArea` | `boolean` | `false` | Platform güvenli alan kılavuz katmanı. |
+| `showSafeArea` | `boolean` | `false` | Güvenli alan kılavuzu (yalnız Studio/Player; `remotion render` çıktısında görünmez). |
 
 ### Sahne Tanımı Örneği
 
@@ -209,6 +209,7 @@ Dikey platform arayüz güvenli alanlarını gösteren denetim katmanı.
 | `visible` | `boolean` | `false` | Katmanın gösterilip gösterilmeyeceği. |
 | `platform` | `SafeAreaPlatform` | `"all"` | `"all"` \| `"youtube-shorts"` \| `"tiktok"` \| `"instagram-reels"`. |
 | `opacity` | `number` | `0.85` | Kılavuz opaklığı. |
+| `showInRender` | `boolean` | `false` | Katmanı `remotion render` / `remotion still` çıktısına da çizer. |
 
 ## Kendi Seslendirmeniz (TTS) ve Whisper Kelime Zaman Damgalarını Kullanma
 
@@ -286,7 +287,7 @@ Dikey video platformlarında ekranın kenarları kullanıcı arayüzü butonlar�
 - **Üst Risk Bölgesi (0 - 200px)**: Arama kutusu, ses seçici ve durum simgeleri yer alır.
 - **Sağ Risk Sütunu (920px - 1080px)**: Beğeni, yorum, paylaşma ve müzik simgeleri bulunur.
 - **Alt Risk Bölgesi (1440px - 1920px)**: Profil resmi, takip butonu, video başlığı ve ilerleme çubuğu yer alır.
-- **Güvenli İçerik Alanı**: `sol: 60px`, `üst: 200px`, `sağ: 180px`, `alt: 480px`. Tüm temel çizimler, oklar ve maskot bu sınırın içinde tutulmalıdır. Altyazılar varsayılan olarak `bottom: 420px` konumunda durarak alt arayüzün üzerinde kalır.
+- **Güvenli İçerik Alanı**: `sol: 60px`, `üst: 200px`, `sağ: 180px`, `alt: 480px`. Tüm temel çizimler, oklar ve maskot bu sınırın içinde tutulmalıdır. Altyazılar varsayılan olarak `positionBottom: 500` ve 180px sağ boşlukla bu kutunun içinde kalır. Katman yalnız geliştirme aracıdır; son render'a varsayılan olarak girmez.
 
 ## Proje Dizini
 

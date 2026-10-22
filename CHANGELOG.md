@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 2026-10-22
 
+### Fixed
+- Captions: no CSS transitions (frame-driven pop), end-exclusive word highlight, default `positionBottom` 500 and 180px right margin so captions stay in the safe box.
+- Audio and image paths now go through `staticFile()`; `trimBefore` replaces the deprecated `startFrom`.
+- `ZoomTo` honours `durationFrames`; composition duration, fps and size come from the timeline.
+- Safe-area overlay is hidden in final renders unless `showInRender` is set.
+- Schema rejects scenes with `end <= start` and words ending before they start.
+
 ### Added
 - Core data model and Zod validation schemas (`TimelineSchema`, `SceneSchema`, `WordSchema`, `MascotConfigSchema`, `CaptionStyleSchema`).
 - Animated word-level `<Captions>` component with smart 1-2 line splitting, safe-area offset, and active word highlighting.
