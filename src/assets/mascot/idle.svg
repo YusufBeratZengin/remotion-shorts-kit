@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 320" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bodyGradIdle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+    <linearGradient id="bellyGradIdle" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc" />
+      <stop offset="100%" stop-color="#e2e8f0" />
+    </linearGradient>
+    <filter id="glowIdle" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Shadow -->
+  <ellipse cx="120" cy="305" rx="55" ry="10" fill="rgba(0,0,0,0.2)" />
+
+  <!-- Antenna -->
+  <line x1="120" y1="45" x2="120" y2="20" stroke="#0369a1" stroke-width="6" stroke-linecap="round" />
+  <circle cx="120" cy="16" r="10" fill="#f59e0b" filter="url(#glowIdle)" />
+  <circle cx="118" cy="13" r="3" fill="#fef3c7" />
+
+  <!-- Feet -->
+  <ellipse cx="90" cy="295" rx="20" ry="12" fill="#0369a1" />
+  <ellipse cx="150" cy="295" rx="20" ry="12" fill="#0369a1" />
+
+  <!-- Left Arm (Resting) -->
+  <path d="M 50 140 Q 30 180 45 210" fill="none" stroke="#0284c7" stroke-width="16" stroke-linecap="round" />
+  <circle cx="45" cy="210" r="11" fill="#38bdf8" />
+
+  <!-- Right Arm (Resting) -->
+  <path d="M 190 140 Q 210 180 195 210" fill="none" stroke="#0284c7" stroke-width="16" stroke-linecap="round" />
+  <circle cx="195" cy="210" r="11" fill="#38bdf8" />
+
+  <!-- Body Capsule -->
+  <rect x="50" y="45" width="140" height="240" rx="70" fill="url(#bodyGradIdle)" />
+
+  <!-- Belly Plate -->
+  <rect x="75" y="160" width="90" height="95" rx="30" fill="url(#bellyGradIdle)" />
+  <circle cx="120" cy="205" r="8" fill="#10b981" filter="url(#glowIdle)" />
+
+  <!-- Visor -->
+  <rect x="68" y="80" width="104" height="60" rx="26" fill="#0f172a" />
+
+  <!-- Eyes (Cheerfully Looking Forward) -->
+  <ellipse cx="98" cy="110" rx="10" ry="12" fill="#38bdf8" />
+  <circle cx="95" cy="106" r="4" fill="#ffffff" />
+
+  <ellipse cx="142" cy="110" rx="10" ry="12" fill="#38bdf8" />
+  <circle cx="139" cy="106" r="4" fill="#ffffff" />
+
+  <!-- Subtle Smile -->
+  <path d="M 112 124 Q 120 130 128 124" fill="none" stroke="#38bdf8" stroke-width="3" stroke-linecap="round" />
+</svg>
