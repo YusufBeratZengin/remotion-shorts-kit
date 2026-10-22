@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 960" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <linearGradient id="pillGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="100%" stop-color="#0284c7" />
+    </linearGradient>
+
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="rgba(0,0,0,0.6)" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="540" height="960" fill="url(#bgGrad)" />
+
+  <!-- Top Progress Bar -->
+  <rect x="0" y="0" width="540" height="4" fill="rgba(255,255,255,0.15)" />
+  <rect x="0" y="0" width="310" height="4" fill="#38bdf8" />
+
+  <!-- Scene Title Badge -->
+  <g transform="translate(160, 50)">
+    <rect width="220" height="34" rx="17" fill="rgba(15,23,42,0.8)" stroke="rgba(255,255,255,0.15)" />
+    <text x="110" y="22" fill="#94a3b8" font-family="-apple-system, sans-serif" font-size="12" font-weight="700" text-anchor="middle" letter-spacing="1">THE VACUUM BARRIER</text>
+  </g>
+
+  <!-- Mechanism Diagram (Thermos Cross-Section) -->
+  <g transform="translate(190, 150)">
+    <!-- Outer Shell -->
+    <rect x="30" y="30" width="100" height="230" rx="30" fill="none" stroke="#64748b" stroke-width="6" />
+    <!-- Vacuum Layer -->
+    <rect x="42" y="42" width="76" height="206" rx="20" fill="none" stroke="#0ea5e9" stroke-width="4" stroke-dasharray="6,4" />
+    <!-- Inner Flask -->
+    <rect x="52" y="52" width="56" height="186" rx="14" fill="#f59e0b" fill-opacity="0.25" stroke="#f59e0b" stroke-width="4" />
+    <!-- Hot Tea Core -->
+    <rect x="58" y="70" width="44" height="160" rx="8" fill="#ef4444" fill-opacity="0.85" />
+    <!-- Steam waves -->
+    <path d="M 70 20 Q 75 10 70 0" fill="none" stroke="#fca5a5" stroke-width="3" stroke-linecap="round" />
+    <path d="M 85 24 Q 90 14 85 4" fill="none" stroke="#fca5a5" stroke-width="3" stroke-linecap="round" />
+  </g>
+
+  <!-- Callout Card -->
+  <g transform="translate(60, 430)" filter="url(#shadow)">
+    <rect width="420" height="100" rx="16" fill="rgba(15,23,42,0.92)" stroke="rgba(255,255,255,0.1)" />
+    <rect width="6" height="100" rx="3" fill="#10b981" />
+    <text x="30" y="38" fill="#10b981" font-family="-apple-system, sans-serif" font-size="14" font-weight="800" letter-spacing="1">ZERO MOLECULES</text>
+    <text x="30" y="68" fill="#f8fafc" font-family="-apple-system, sans-serif" font-size="17" font-weight="600">Vacuum layer completely stops conduction heat loss.</text>
+  </g>
+
+  <!-- Arrow pointing to vacuum layer -->
+  <path d="M 230 420 Q 240 370 248 340" fill="none" stroke="#10b981" stroke-width="5" stroke-linecap="round" />
+  <polygon points="248,340 236,346 244,358" fill="#10b981" />
+
+  <!-- Pip Mascot (Scaled down) -->
+  <g transform="translate(195, 560)">
+    <!-- Shadow -->
+    <ellipse cx="75" cy="185" rx="35" ry="7" fill="rgba(0,0,0,0.3)" />
+    <!-- Antenna -->
+    <line x1="75" y1="25" x2="75" y2="10" stroke="#0369a1" stroke-width="4" stroke-linecap="round" />
+    <circle cx="75" cy="8" r="6" fill="#f59e0b" />
+    <!-- Feet -->
+    <ellipse cx="56" cy="180" rx="12" ry="7" fill="#0369a1" />
+    <ellipse cx="94" cy="180" rx="12" ry="7" fill="#0369a1" />
+    <!-- Left Arm Pointing Up -->
+    <path d="M 32 85 Q 15 65 22 45" fill="none" stroke="#0284c7" stroke-width="10" stroke-linecap="round" />
+    <circle cx="22" cy="45" r="7" fill="#38bdf8" />
+    <!-- Right Arm -->
+    <path d="M 118 85 Q 130 110 122 125" fill="none" stroke="#0284c7" stroke-width="10" stroke-linecap="round" />
+    <circle cx="122" cy="125" r="7" fill="#38bdf8" />
+    <!-- Body Capsule -->
+    <rect x="32" y="25" width="86" height="150" rx="43" fill="url(#pillGrad)" />
+    <!-- Belly Plate -->
+    <rect x="47" y="98" width="56" height="60" rx="18" fill="#f8fafc" />
+    <circle cx="75" cy="125" r="5" fill="#10b981" />
+    <!-- Visor -->
+    <rect x="43" y="48" width="64" height="38" rx="16" fill="#0f172a" />
+    <!-- Confident Eyes -->
+    <ellipse cx="61" cy="65" rx="6" ry="7" fill="#38bdf8" />
+    <ellipse cx="89" cy="65" rx="6" ry="7" fill="#38bdf8" />
+    <path d="M 70 76 Q 75 80 80 76" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" />
+  </g>
+
+  <!-- Captions Container -->
+  <g transform="translate(45, 770)" filter="url(#shadow)">
+    <rect width="450" height="96" rx="18" fill="rgba(15,23,42,0.92)" stroke="rgba(255,255,255,0.12)" />
+    <!-- Line 1: NO AIR MEANS -->
+    <text x="225" y="42" font-family="-apple-system, sans-serif" font-size="24" font-weight="800" text-anchor="middle">
+      <tspan fill="#ffffff">NO </tspan>
+      <tspan fill="#ffffff">AIR </tspan>
+      <tspan fill="#ffffff">MEANS</tspan>
+    </text>
+    <!-- Line 2: ZERO CONDUCTION! with highlight on ZERO -->
+    <text x="225" y="76" font-family="-apple-system, sans-serif" font-size="26" font-weight="900" text-anchor="middle">
+      <tspan fill="#facc15" text-decoration="underline">ZERO </tspan>
+      <tspan fill="#ffffff">CONDUCTION!</tspan>
+    </text>
+  </g>
+
+  <!-- Bottom Safe Area Indicator (Subtle Guide) -->
+  <line x1="0" y1="890" x2="540" y2="890" stroke="rgba(239,68,68,0.3)" stroke-dasharray="4,4" stroke-width="2" />
+  <text x="270" y="930" fill="rgba(239,68,68,0.5)" font-family="monospace" font-size="11" text-anchor="middle">SAFE AREA GUIDE BOUNDARY</text>
+</svg>
