@@ -1,8 +1,14 @@
 import type React from "react";
+import { getRemotionEnvironment } from "remotion";
 import type { SafeAreaPlatform } from "../schema";
 
 export interface SafeAreaOverlayProps {
   visible?: boolean;
+  /**
+   * By default the overlay is hidden in final renders (`remotion render`) and only
+   * shows in the Studio / Player. Set to true to burn it into an exported frame.
+   */
+  showInRender?: boolean;
   platform?: SafeAreaPlatform;
   opacity?: number;
   className?: string;
@@ -11,12 +17,13 @@ export interface SafeAreaOverlayProps {
 
 export const SafeAreaOverlay: React.FC<SafeAreaOverlayProps> = ({
   visible = false,
+  showInRender = false,
   platform = "all",
   opacity = 0.85,
   className,
   style,
 }) => {
-  if (!visible) {
+  if (!visible || (!showInRender && getRemotionEnvironment().isRendering)) {
     return null;
   }
 

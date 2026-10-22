@@ -2,9 +2,10 @@ import type React from "react";
 import { useMemo } from "react";
 import { Audio, useCurrentFrame, useVideoConfig } from "remotion";
 import { Captions, ProgressBar, SafeAreaOverlay, SceneRenderer } from "../components";
+import { resolveAsset } from "../helpers/resolveAsset";
 import { getActiveScene } from "../helpers/scene";
 import { framesToSeconds } from "../helpers/time";
-import { type Timeline, validateTimeline } from "../schema";
+import { DEFAULT_CAPTION_STYLE, type Timeline, validateTimeline } from "../schema";
 
 export type ExplainerShortProps = {
   timeline: Timeline;
@@ -13,7 +14,7 @@ export type ExplainerShortProps = {
 
 export const ExplainerShort: React.FC<ExplainerShortProps> = ({ timeline: rawTimeline }) => {
   const currentFrame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, width, height } = useVideoConfig();
   const currentTimeSec = framesToSeconds(currentFrame, fps);
 
   const timeline = useMemo(() => {
@@ -28,10 +29,11 @@ export const ExplainerShort: React.FC<ExplainerShortProps> = ({ timeline: rawTim
     <div
       style={{
         position: "relative",
-        width: 1080,
-        height: 1920,
+        width,
+        height,
         backgroundColor: "#000000",
         overflow: "hidden",
+        fontFamily: DEFAULT_CAPTION_STYLE.fontFamily,
       }}
     >
       {/* Active Scene Rendering */}
@@ -61,9 +63,9 @@ export const ExplainerShort: React.FC<ExplainerShortProps> = ({ timeline: rawTim
       {/* Optional Audio Track */}
       {timeline.audio && (
         <Audio
-          src={timeline.audio.src}
+          src={resolveAsset(timeline.audio.src)}
           volume={timeline.audio.volume}
-          startFrom={timeline.audio.startOffset ? Math.round(timeline.audio.startOffset * fps) : 0}
+          trimBefore={timeline.audio.startOffset ? Math.round(timeline.audio.startOffset * fps) : 0}
         />
       )}
     </div>

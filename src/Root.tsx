@@ -1,8 +1,23 @@
 import type React from "react";
-import { Composition } from "remotion";
-import { ExplainerShort } from "./compositions/ExplainerShort";
+import { type CalculateMetadataFunction, Composition } from "remotion";
+import { ExplainerShort, type ExplainerShortProps } from "./compositions/ExplainerShort";
 import { ThermosExplainer, demoTimeline } from "./examples/ThermosExplainer";
+import { timelineDurationInFrames } from "./helpers/scene";
 import { ExplainerPropsSchema, type Timeline } from "./schema";
+
+/**
+ * Derives fps, size and duration from the timeline itself, so editing the JSON
+ * (or the Studio props) never leaves the composition with a stale length.
+ */
+const calculateTimelineMetadata: CalculateMetadataFunction<ExplainerShortProps> = ({ props }) => {
+  const { timeline } = props;
+  return {
+    fps: timeline.fps,
+    width: timeline.width,
+    height: timeline.height,
+    durationInFrames: timelineDurationInFrames(timeline),
+  };
+};
 
 const safeAreaDemoTimeline: Timeline = {
   ...demoTimeline,
@@ -16,10 +31,10 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="ThermosExplainer"
         component={ThermosExplainer}
-        durationInFrames={600}
-        fps={30}
-        width={1080}
-        height={1920}
+        durationInFrames={timelineDurationInFrames(demoTimeline)}
+        fps={demoTimeline.fps}
+        width={demoTimeline.width}
+        height={demoTimeline.height}
       />
 
       {/* Generic Dynamic Explainer Short with Schema Controls in Studio */}
@@ -27,10 +42,11 @@ export const RemotionRoot: React.FC = () => {
         id="ExplainerShort"
         component={ExplainerShort}
         schema={ExplainerPropsSchema}
-        durationInFrames={600}
-        fps={30}
-        width={1080}
-        height={1920}
+        calculateMetadata={calculateTimelineMetadata}
+        durationInFrames={timelineDurationInFrames(demoTimeline)}
+        fps={demoTimeline.fps}
+        width={demoTimeline.width}
+        height={demoTimeline.height}
         defaultProps={{
           timeline: demoTimeline,
         }}
@@ -41,10 +57,11 @@ export const RemotionRoot: React.FC = () => {
         id="SafeAreaPreview"
         component={ExplainerShort}
         schema={ExplainerPropsSchema}
-        durationInFrames={600}
-        fps={30}
-        width={1080}
-        height={1920}
+        calculateMetadata={calculateTimelineMetadata}
+        durationInFrames={timelineDurationInFrames(demoTimeline)}
+        fps={demoTimeline.fps}
+        width={demoTimeline.width}
+        height={demoTimeline.height}
         defaultProps={{
           timeline: safeAreaDemoTimeline,
         }}

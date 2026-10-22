@@ -18,6 +18,7 @@ export const ZoomTo: React.FC<ZoomToProps> = ({
   targetY,
   scale = 1.3,
   startFrame = 0,
+  durationFrames = 30,
   children,
   className,
   style,
@@ -30,6 +31,7 @@ export const ZoomTo: React.FC<ZoomToProps> = ({
   const zoomProgress = spring({
     frame: relFrame,
     fps,
+    durationInFrames: durationFrames,
     config: {
       damping: 16,
       mass: 0.8,

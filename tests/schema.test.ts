@@ -117,3 +117,25 @@ describe("timeline schema validation", () => {
     expect(result.success).toBe(false);
   });
 });
+
+describe("timeline schema ordering rules", () => {
+  it("rejects scenes whose end is not after start", () => {
+    const result = safeParseTimeline({
+      scenes: [{ id: "bad", start: 3, end: 3, background: "#000" }],
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("rejects words that end before they start", () => {
+    const result = safeParseTimeline({
+      scenes: [{ id: "s", start: 0, end: 2, background: "#000" }],
+      captions: [{ text: "hi", start: 1, end: 0.5 }],
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it("accepts the bundled demo timeline", async () => {
+    const demo = await import("../examples/demo-timeline.json");
+    expect(safeParseTimeline(demo.default).success).toBe(true);
+  });
+});

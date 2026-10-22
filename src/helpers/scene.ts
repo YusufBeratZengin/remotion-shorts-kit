@@ -66,3 +66,18 @@ export function getSceneLocalFrame(scene: Scene, globalFrame: number, fps: numbe
 export function getSceneLocalTime(scene: Scene, currentTimeSec: number): number {
   return Math.max(0, currentTimeSec - scene.start);
 }
+
+/**
+ * Total length of a timeline in frames: the latest scene or caption end, rounded up.
+ */
+export function timelineDurationInFrames(timeline: {
+  fps: number;
+  scenes: { end: number }[];
+  captions?: { end: number }[];
+}): number {
+  const ends = [
+    ...timeline.scenes.map((s) => s.end),
+    ...(timeline.captions ?? []).map((w) => w.end),
+  ];
+  return Math.max(1, Math.ceil(Math.max(0, ...ends) * timeline.fps));
+}

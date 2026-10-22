@@ -1,5 +1,6 @@
 import type React from "react";
 import { useCurrentFrame, useVideoConfig } from "remotion";
+import { resolveAsset } from "../helpers/resolveAsset";
 import { framesToSeconds, secondsToFrames } from "../helpers/time";
 import type { Scene } from "../schema";
 import { Arrow } from "./Arrow";
@@ -30,7 +31,7 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, className, 
 
   const bgStyle: React.CSSProperties = isImageBg
     ? {
-        backgroundImage: `url(${scene.background})`,
+        backgroundImage: `url("${resolveAsset(scene.background)}")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }

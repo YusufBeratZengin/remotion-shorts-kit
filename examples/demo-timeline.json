@@ -9,8 +9,8 @@
     "textColor": "#ffffff",
     "highlightColor": "#facc15",
     "boxColor": "rgba(15, 23, 42, 0.88)",
-    "positionBottom": 420,
-    "maxCharsPerLine": 24,
+    "positionBottom": 500,
+    "maxCharsPerLine": 18,
     "maxLines": 2
   },
   "scenes": [
@@ -23,7 +23,7 @@
       "mascot": {
         "pose": "thinking",
         "x": 540,
-        "y": 1320,
+        "y": 1000,
         "scale": 1.15,
         "flip": false
       },
@@ -48,7 +48,7 @@
       "mascot": {
         "pose": "explaining",
         "x": 780,
-        "y": 1350,
+        "y": 1010,
         "scale": 1.05,
         "flip": false
       },
@@ -66,7 +66,7 @@
           "type": "arrow",
           "id": "heat-loss-arrow",
           "fromX": 740,
-          "fromY": 1200,
+          "fromY": 900,
           "toX": 420,
           "toY": 680,
           "label": "Loss vectors",
@@ -84,7 +84,7 @@
       "mascot": {
         "pose": "talking",
         "x": 300,
-        "y": 1350,
+        "y": 1010,
         "scale": 1.05,
         "flip": true
       },
@@ -102,7 +102,7 @@
           "type": "arrow",
           "id": "vacuum-arrow",
           "fromX": 340,
-          "fromY": 1200,
+          "fromY": 900,
           "toX": 620,
           "toY": 700,
           "label": "No air to transfer heat",
@@ -127,7 +127,7 @@
       "mascot": {
         "pose": "explaining",
         "x": 760,
-        "y": 1320,
+        "y": 1000,
         "scale": 1.1,
         "flip": false
       },
@@ -145,7 +145,7 @@
           "type": "arrow",
           "id": "mirror-arrow",
           "fromX": 720,
-          "fromY": 1180,
+          "fromY": 880,
           "toX": 450,
           "toY": 720,
           "label": "Radiation reflects",
@@ -163,7 +163,7 @@
       "mascot": {
         "pose": "surprised",
         "x": 540,
-        "y": 1280,
+        "y": 990,
         "scale": 1.2,
         "flip": false
       },

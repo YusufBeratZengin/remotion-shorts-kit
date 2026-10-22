@@ -21,12 +21,17 @@ export type MascotConfig = z.infer<typeof MascotConfigSchema>;
 /**
  * Single word timestamped for animated captions (e.g. from Whisper or TTS).
  */
-export const WordSchema = z.object({
-  text: z.string().min(1),
-  start: z.number().min(0).describe("Start time in seconds"),
-  end: z.number().min(0).describe("End time in seconds"),
-  confidence: z.number().min(0).max(1).optional(),
-});
+export const WordSchema = z
+  .object({
+    text: z.string().min(1),
+    start: z.number().min(0).describe("Start time in seconds"),
+    end: z.number().min(0).describe("End time in seconds"),
+    confidence: z.number().min(0).max(1).optional(),
+  })
+  .refine((word) => word.end >= word.start, {
+    message: "Word end must not be before start",
+    path: ["end"],
+  });
 export type Word = z.infer<typeof WordSchema>;
 
 /**
@@ -95,28 +100,33 @@ export type SceneElement = z.infer<typeof SceneElementSchema>;
 /**
  * Single scene definition inside a timeline.
  */
-export const SceneSchema = z.object({
-  id: z.string().min(1),
-  start: z.number().min(0).describe("Scene start time in seconds"),
-  end: z.number().min(0).describe("Scene end time in seconds"),
-  background: z.string().describe("Hex color, CSS gradient, or image URL"),
-  title: z.string().optional(),
-  mascot: MascotConfigSchema.optional(),
-  elements: z.array(SceneElementSchema).default([]),
-});
+export const SceneSchema = z
+  .object({
+    id: z.string().min(1),
+    start: z.number().min(0).describe("Scene start time in seconds"),
+    end: z.number().min(0).describe("Scene end time in seconds"),
+    background: z.string().describe("Hex color, CSS gradient, or image URL"),
+    title: z.string().optional(),
+    mascot: MascotConfigSchema.optional(),
+    elements: z.array(SceneElementSchema).default([]),
+  })
+  .refine((scene) => scene.end > scene.start, {
+    message: "Scene end must be greater than start",
+    path: ["end"],
+  });
 export type Scene = z.infer<typeof SceneSchema>;
 
 export const DEFAULT_CAPTION_STYLE = {
-  fontFamily: "sans-serif",
-  fontSize: 56,
+  fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+  fontSize: 54,
   textColor: "#ffffff",
   highlightColor: "#facc15",
-  boxColor: "rgba(0, 0, 0, 0.65)",
-  boxPadding: 16,
-  borderRadius: 18,
-  maxCharsPerLine: 26,
+  boxColor: "rgba(15, 23, 42, 0.85)",
+  boxPadding: 20,
+  borderRadius: 20,
+  maxCharsPerLine: 18,
   maxLines: 2,
-  positionBottom: 420,
+  positionBottom: 500,
   uppercase: true,
 };
 

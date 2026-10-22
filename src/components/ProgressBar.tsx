@@ -48,7 +48,6 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
           backgroundColor: color,
           borderRadius,
           boxShadow: `0 0 10px ${color}99`,
-          transition: "width 0.05s linear",
         }}
       />
     </div>

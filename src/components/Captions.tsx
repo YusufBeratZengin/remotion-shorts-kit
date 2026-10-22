@@ -1,13 +1,14 @@
 import type React from "react";
 import { useMemo } from "react";
 import { useCurrentFrame, useVideoConfig } from "remotion";
+import { Easing, interpolate } from "remotion";
 import {
   type BatchingOptions,
   findActiveCaptionBatch,
   groupWordsIntoBatches,
 } from "../helpers/captions";
 import { framesToSeconds } from "../helpers/time";
-import type { CaptionStyle, Word } from "../schema";
+import { type CaptionStyle, DEFAULT_CAPTION_STYLE, type Word } from "../schema";
 
 export interface CaptionsProps {
   captions: Word[];
@@ -16,19 +17,7 @@ export interface CaptionsProps {
   className?: string;
 }
 
-const DEFAULT_STYLE: CaptionStyle = {
-  fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
-  fontSize: 54,
-  textColor: "#ffffff",
-  highlightColor: "#facc15",
-  boxColor: "rgba(15, 23, 42, 0.85)",
-  boxPadding: 20,
-  borderRadius: 20,
-  maxCharsPerLine: 24,
-  maxLines: 2,
-  positionBottom: 420,
-  uppercase: true,
-};
+const DEFAULT_STYLE: CaptionStyle = { ...DEFAULT_CAPTION_STYLE };
 
 export const Captions: React.FC<CaptionsProps> = ({
   captions,
@@ -76,7 +65,8 @@ export const Captions: React.FC<CaptionsProps> = ({
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        padding: "0 60px",
+        // Keep captions inside the safe box: 60px left margin, 180px right (UI rail).
+        padding: "0 180px 0 60px",
         pointerEvents: "none",
         zIndex: 50,
       }}
@@ -93,7 +83,7 @@ export const Captions: React.FC<CaptionsProps> = ({
           flexDirection: "column",
           alignItems: "center",
           gap: 12,
-          maxWidth: 960,
+          maxWidth: 840,
           border: "1px solid rgba(255, 255, 255, 0.12)",
         }}
       >
@@ -104,15 +94,16 @@ export const Captions: React.FC<CaptionsProps> = ({
               key={lineKey}
               style={{
                 display: "flex",
-                flexWrap: "wrap",
+                flexWrap: "nowrap",
                 justifyContent: "center",
                 alignItems: "center",
                 gap: "10px 14px",
               }}
             >
-              {line.map((word) => {
-                const isActive = currentTimeSec >= word.start && currentTimeSec <= word.end;
-                const isPast = currentTimeSec > word.end;
+              {line.map((word, wordIndex) => {
+                // End is exclusive so that back-to-back words never highlight together.
+                const isActive = currentTimeSec >= word.start && currentTimeSec < word.end;
+                const isPast = currentTimeSec >= word.end;
 
                 let color = mergedStyle.textColor;
                 let scale = 1;
@@ -122,17 +113,22 @@ export const Captions: React.FC<CaptionsProps> = ({
 
                 if (isActive) {
                   color = mergedStyle.highlightColor;
-                  scale = 1.08;
+                  // Frame-driven pop (CSS transitions are not deterministic in renders).
+                  scale = interpolate(currentTimeSec - word.start, [0, 0.08], [1, 1.08], {
+                    extrapolateLeft: "clamp",
+                    extrapolateRight: "clamp",
+                    easing: Easing.out(Easing.quad),
+                  });
                   fontWeight = 900;
                   textShadow = `0 0 16px ${mergedStyle.highlightColor}66, 0 2px 10px rgba(0, 0, 0, 0.9)`;
-                  background = "rgba(250, 204, 21, 0.15)";
+                  background = `${mergedStyle.highlightColor}26`;
                 } else if (!isPast) {
                   color = "rgba(255, 255, 255, 0.65)";
                 }
 
                 return (
                   <span
-                    key={`${word.text}-${word.start}`}
+                    key={`${wordIndex}-${word.start}`}
                     style={{
                       fontFamily: mergedStyle.fontFamily,
                       fontSize: mergedStyle.fontSize,
@@ -140,7 +136,6 @@ export const Captions: React.FC<CaptionsProps> = ({
                       color,
                       textTransform: mergedStyle.uppercase ? "uppercase" : "none",
                       transform: `scale(${scale})`,
-                      transition: "transform 0.08s ease-out, color 0.08s ease-out",
                       display: "inline-block",
                       padding: "2px 8px",
                       borderRadius: 8,
