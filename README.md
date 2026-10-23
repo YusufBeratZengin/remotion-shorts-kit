@@ -1,43 +1,62 @@
 # remotion-shorts-kit
+[![CI](https://github.com/YusufBeratZengin/remotion-shorts-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/YusufBeratZengin/remotion-shorts-kit/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/remotion-shorts-kit)](https://www.npmjs.com/package/remotion-shorts-kit) [![MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE) [![Remotion 4](https://img.shields.io/badge/Remotion-4-blue)](https://www.remotion.dev/) [![Node](https://img.shields.io/badge/node-%3E%3D20-green)](package.json)
+[English](README.md) | [Türkçe](README.tr.md)
 
-Open-source Remotion starter kit for programmatically creating 1080x1920 vertical explainer shorts.
+A clonable starter and installable React library for 1080×1920 explainer shorts, built with Remotion 4 and strict TypeScript.
+A typed JSON-driven timeline, safe-area aware word-level captions, and original assets only keep content reusable and predictable.
+Install the library: `npm install remotion-shorts-kit react@18 react-dom@18 remotion@4`
+Try the CLI after installation: `npx shorts-kit validate node_modules/remotion-shorts-kit/examples/demo-timeline.json`
+![Rendered thermos explainer, seven-second excerpt](docs/demo.gif)
 
-![remotion-shorts-kit preview](docs/demo-preview.svg)
+## Demo
+
+The GIF is a 540×960 excerpt of the actual 20-second `ThermosExplainer` output, under 3 MB. [Static fallback](docs/demo-preview.svg).
+
+JSON → schema defaults and validation → composition:
+
+```tsx
+import { ExplainerShort, TimelineSchema } from "remotion-shorts-kit";
+
+const timeline = TimelineSchema.parse({
+  scenes: [{ id: "intro", start: 0, end: 5, background: "#0f172a" }],
+  captions: [{ text: "Hello!", start: 0.2, end: 1.2 }],
+});
+export const MyShort = () => <ExplainerShort timeline={timeline} />;
+```
+
+Register `MyShort` in your Remotion project's root. Importing this library does not register a root or include example compositions.
 
 ## Overview
 
-Producing mechanism-explainer shorts programmatically is popular across YouTube Shorts, TikTok, and Instagram Reels. However, developers and creators routinely rebuild the same infrastructure: word-level subtitle synchronizers, scene sequencers, mascot pose switches, directional pointer arrows, callout boxes, and safe-area margins.
-
-`remotion-shorts-kit` provides a typed, tested, and modular foundation built on Remotion 4, React, TypeScript strict mode, and Zod. It separates creative assets and content timelines from rendering mechanics, allowing video pipelines to be driven purely by structured JSON.
+Change a timeline instead of rebuilding scene sequencing, subtitle layout, mascot poses, callouts, arrows, and camera zooms. Clone this repository to use its Studio and example compositions, or import the components into an existing Remotion project.
 
 ## Features
 
-- **Data-Driven Architecture**: Fully validated timeline schema via Zod (`src/schema.ts`).
-- **Word-Level Animated Captions**: Synchronized to word timestamps with dynamic 1-2 line batching, pause detection, safe-area elevation, and active word pop highlights.
-- **SVG Mascot System**: Original geometric robot mascot ("Pip") with 5 distinct poses (`idle`, `talking`, `explaining`, `thinking`, `surprised`) and squash/bounce entrance dynamics.
-- **Visual Callouts and Pointers**: `<Callout>` spring cards, `<Arrow>` bezier pointers with attention pulses, and `<ZoomTo>` camera pan-and-scale effects.
-- **Safe Area Guide**: A Studio-only overlay (`<SafeAreaOverlay>`) showing a conservative zone that avoids typical Shorts/TikTok/Reels UI. It is hidden in `remotion render` output unless you opt in with `showInRender`. The `platform` prop only changes the label; the geometry is one shared, conservative layout.
-- **Unit-Tested Pure Helpers**: Standalone units for time-to-frame calculation, line breaking, scene lookup, and easing curves.
-- **Render Pipeline**: npm scripts for Studio inspection and MP4 export through the Remotion CLI. Composition length, fps and size are derived from the timeline.
+- Zod schemas and declaration files for components, helpers, and timelines.
+- Word highlights driven by frames, memoized line layout, and pause-aware caption batches.
+- Original SVG robot Pip in five poses: idle, talking, explaining, thinking, and surprised.
+- Callout cards, curved arrows, camera focus, progress bar, and a safe-area overlay.
+- Local CLI for timeline validation and Whisper word conversion.
+
+## Install
+
+As a library, install the package and its React 18 / Remotion 4 peers with the command above. Zod is included as a runtime dependency. The package is ESM; CommonJS `require()` is not supported. The npm badge reflects registry availability; until the first release, use the source starter.
 
 ## Quick Start
 
 ### Prerequisites
 
-- Node.js >= 20.0.0
-- npm >= 10.0.0
+Node.js 20 or newer and npm. Rendering also needs a supported Chromium installation; Remotion may download one on the first render.
 
 ### Installation
 
 ```bash
 git clone https://github.com/YusufBeratZengin/remotion-shorts-kit.git
 cd remotion-shorts-kit
-npm install
+npm ci
 ```
 
 ### Running the Studio
-
-Open the interactive Remotion Studio to preview animations, inspect layouts, and tweak parameters:
 
 ```bash
 npm run studio
@@ -45,310 +64,167 @@ npm run studio
 
 ### Rendering the Demo Video
 
-Render the 20-second 1080x1920 demo composition ("How a Thermos Keeps Tea Hot") to `out/demo.mp4`:
-
 ```bash
 npm run render:demo
+npm run render:example2
 ```
+
+Outputs: `out/demo.mp4` (20 seconds) and `out/siphon.mp4` (15 seconds), both 1080×1920 at 30 fps. Both examples are silent; add your own narration.
 
 ### Testing and Code Quality
 
+See [Development](#development) for the complete checks.
+
+## Usage
+
+The installed `shorts-kit` executable accepts raw timeline JSON:
+
 ```bash
-# Run unit test suite via Vitest
-npm run test
-
-# Run strict TypeScript compiler verification
-npm run typecheck
-
-# Run Biome lint checks
-npm run lint
-
-# Auto-apply Biome format and lint fixes
-npm run lint:fix
+node bin/shorts-kit.mjs validate examples/demo-timeline.json
 ```
+
+In an installed project, replace `node bin/shorts-kit.mjs` with `npx shorts-kit`. Invalid JSON, schema errors, and bad arguments exit with code 1. Validation reports paths such as `$.captions[1].start`.
+
+`TimelineSchema.parse(json)` and `parseTimeline(json)` return a default-filled timeline or throw. `validateTimeline(json)` returns `{ ok: true, errors: [], data }` or `{ ok: false, errors: string[] }`; `safeParseTimeline` retains Zod's result shape.
+
+## Examples
+
+- [Thermos timeline](examples/demo-timeline.json): heat transfer, 20 seconds; `ThermosExplainer`.
+- [Siphon timeline](examples/second-timeline.json): a full tube, lower outlet, and air breaking the flow, 15 seconds; `SiphonExplainer`, two mascot poses.
+- [Whisper fixture](tests/fixtures/whisper.json): synthetic word timestamps for CLI practice.
 
 ## Timeline JSON Reference
 
-The rendering pipeline is driven by a `Timeline` object. The full schema is defined in `src/schema.ts` and validated with Zod.
+The full schema is in [src/schema.ts](src/schema.ts). Scene order is preserved; scene intervals cannot overlap. Caption words must be sorted and cannot overlap. Touching end/start boundaries are allowed.
 
 ### Top-Level Fields
 
-| Field | Type | Default | Description |
-| --- | --- | --- | --- |
-| `fps` | `number` | `30` | Frame rate (frames per second). |
-| `width` | `number` | `1080` | Canvas width in pixels. |
-| `height` | `number` | `1920` | Canvas height in pixels. |
-| `scenes` | `Scene[]` | (Required) | Array of sequential or time-indexed scenes. |
-| `captions` | `Word[]` | `[]` | Word-level timestamped transcription. |
-| `audio` | `AudioConfig` | `undefined` | Optional background or narration audio track. |
-| `captionStyle`| `CaptionStyle`| `{}` | Global typography and visual style for subtitles. |
-| `showProgressBar` | `boolean` | `true` | Display progress bar indicator at top or bottom. |
-| `showSafeArea` | `boolean` | `false` | Show the safe-area guide in Studio/Player (never in `remotion render` output). |
+| Field | Default | Meaning |
+| --- | --- | --- |
+| `scenes` | required | Nonempty array of scenes with `id`, `start`, `end`, and `background` |
+| `fps`, `width`, `height` | `30`, `1080`, `1920` | Frame rate and canvas size |
+| `captions` | `[]` | Words: `{ text, start, end, confidence? }`, times in seconds |
+| `audio` | absent | `{ src, volume: 1, startOffset: 0 }`, offset in seconds |
+| `captionStyle` | schema defaults | Font, highlight, line layout, and caption position |
+| `showSafeArea` | `false` | Studio/Player guide; hidden in final renders by default |
+| `showProgressBar` | `true` | Playback progress |
 
 ### Scene Definition
 
-```json
-{
-  "id": "scene-1-intro",
-  "start": 0.0,
-  "end": 4.0,
-  "background": "linear-gradient(180deg, #0f172a 0%, #1e293b 100%)",
-  "title": "The Hot Tea Mystery",
-  "mascot": {
-    "pose": "thinking",
-    "x": 540,
-    "y": 1320,
-    "scale": 1.15,
-    "flip": false
-  },
-  "elements": [
-    {
-      "type": "callout",
-      "id": "temp-callout",
-      "x": 540,
-      "y": 660,
-      "title": "Steaming Fresh",
-      "text": "How does a flask keep tea hot for 12 hours?",
-      "accentColor": "#f59e0b"
-    }
-  ]
-}
-```
+Each scene has `id`, `start`, `end` (seconds), and a CSS `background`; optional `title`, `mascot`, and `elements`. `mascot` accepts `{ pose, x, y, scale: 1, flip: false }`. `x`/`y` are canvas coordinates.
 
 ### Scene Elements
 
-- **Callout (`type: "callout"`)**: Floating text card with an accent indicator, title, body text, and optional icon.
-- **Arrow (`type: "arrow"`)**: Directional pointer between `(fromX, fromY)` and `(toX, toY)` with configurable curvature, stroke width, color, and pulse animation.
-- **Zoom (`type: "zoom"`)**: Focuses camera attention onto `(targetX, targetY)` with spring scaling during the scene.
+- `callout`: `id`, `x`, `y`, `text`; optional `title`, `icon`, and colors.
+- `arrow`: `id`, `fromX`, `fromY`, `toX`, `toY`; optional label, color, stroke width, curvature.
+- `zoom`: `id`, `targetX`, `targetY`; optional `scale` and `durationFrames`.
+
+All elements accept optional `start`/`end` offsets in seconds relative to their scene. End boundaries are exclusive.
 
 ## Component Props Reference
 
+See [component declarations and source](src/components/index.ts) for all exported prop types. Existing component props are shared by the library and starter.
+
 ### `<Captions>`
 
-Renders word-highlighted subtitle boxes broken across 1-2 lines.
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `captions` | `Word[]` | (Required) | Array of `{ text, start, end }` objects. |
-| `style` | `Partial<CaptionStyle>` | `{}` | Visual overrides (font, colors, padding). |
-| `batchingOptions` | `BatchingOptions` | `{}` | Line breaking thresholds (maxChars, maxLines, pause threshold). |
-| `className` | `string` | `undefined` | Optional CSS class name. |
+Required `captions: Word[]`; optional `style: Partial<CaptionStyle>`, `batchingOptions`, and `className`. Default layout is two lines, 18 characters per line, 500 px from the bottom, with 60/180 px left/right margins.
 
 ### `<Mascot>`
 
-Renders an original SVG character with pose-switching squash and bounce animations.
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `pose` | `MascotPose` | (Required) | `"idle"` \| `"talking"` \| `"explaining"` \| `"thinking"` \| `"surprised"`. |
-| `x` | `number` | (Required) | Horizontal center position in pixels. |
-| `y` | `number` | (Required) | Vertical center position in pixels. |
-| `scale` | `number` | `1` | Scaling factor. |
-| `flip` | `boolean` | `false` | Mirror character horizontally. |
-| `enterFrame` | `number` | `useCurrentFrame()` | Frame offset for the entrance animation. |
+Required `pose`, `x`, `y`; optional `scale`, `flip`, `enterFrame`, `className`, and `style`. Artwork changes with the pose prop.
 
 ### `<Callout>`
 
-Attention card with spring entrance animation.
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `text` | `string` | (Required) | Main callout text. |
-| `x` | `number` | (Required) | Center horizontal position in pixels. |
-| `y` | `number` | (Required) | Center vertical position in pixels. |
-| `title` | `string` | `undefined` | Header text above description. |
-| `icon` | `string` | `undefined` | Leading icon character or symbol. |
-| `accentColor` | `string` | `"#38bdf8"` | Border and highlight accent color. |
-| `backgroundColor` | `string` | `"rgba(15,23,42,0.90)"` | Card background color. |
+Required `text`, `x`, `y`; optional `title`, `icon`, `accentColor`, `backgroundColor`, `textColor`, and entrance animation props.
 
 ### `<Arrow>`
 
-Animated vector arrow connecting two coordinates.
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `fromX` | `number` | (Required) | Start X coordinate in pixels. |
-| `fromY` | `number` | (Required) | Start Y coordinate in pixels. |
-| `toX` | `number` | (Required) | Target X coordinate in pixels. |
-| `toY` | `number` | (Required) | Target Y coordinate in pixels. |
-| `label` | `string` | `undefined` | Floating text label along arrow shaft. |
-| `color` | `string` | `"#f59e0b"` | Arrow stroke and arrowhead color. |
-| `strokeWidth` | `number` | `8` | Line thickness in pixels. |
-| `curvature` | `number` | `0` | Quadratic curve displacement in pixels. |
+Required `fromX`, `fromY`, `toX`, `toY`; optional `label`, `color`, `strokeWidth`, `curvature`, and entrance animation props.
 
 ### `<ZoomTo>`
 
-Wraps content and provides camera focus onto a specific coordinate.
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `targetX` | `number` | (Required) | Focal point X coordinate in pixels. |
-| `targetY` | `number` | (Required) | Focal point Y coordinate in pixels. |
-| `scale` | `number` | `1.3` | Maximum zoom scale. |
-| `startFrame` | `number` | `0` | Relative frame when zoom begins. |
-| `durationFrames` | `number` | `30` | Duration of zoom transition. |
-| `children` | `ReactNode` | (Required) | Scene elements being scaled. |
+Required `targetX`, `targetY`, `children`; optional `scale`, `startFrame`, and `durationFrames`.
 
 ### `<ProgressBar>`
 
-Displays video playback progression.
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `position` | `"top"` \| `"bottom"` | `"bottom"` | Vertical placement on screen. |
-| `height` | `number` | `8` | Thickness in pixels. |
-| `color` | `string` | `"#38bdf8"` | Fill progress color. |
-| `backgroundColor` | `string` | `"rgba(255,255,255,0.18)"` | Bar track color. |
+Optional `position` (`top`/`bottom`), `height`, `color`, and `backgroundColor`.
 
 ### `<SafeAreaOverlay>`
 
-Guides for vertical platform interfaces.
-
-| Prop | Type | Default | Description |
-| --- | --- | --- | --- |
-| `visible` | `boolean` | `false` | Whether overlay is rendered. |
-| `platform` | `SafeAreaPlatform` | `"all"` | `"all"` \| `"youtube-shorts"` \| `"tiktok"` \| `"instagram-reels"`. |
-| `opacity` | `number` | `0.85` | Overlay transparency. |
-| `showInRender` | `boolean` | `false` | Also draw the overlay in `remotion render` / `remotion still` output. |
+Optional `visible`, `platform`, `opacity`, `showInRender`, `className`, and `style`. `platform` changes the label; all platforms share conservative geometry. Use `visible` and `showInRender` together to include it in an exported frame.
 
 ## Bring Your Own TTS + Whisper Word Timestamps
 
-This kit is designed to integrate cleanly with any automated voiceover and transcription workflow.
-
 ### 1. Generate Voice Audio (e.g., ElevenLabs / OpenAI TTS)
 
-Generate your narration audio file in MP3 or WAV format:
-
-```bash
-# Example with OpenAI TTS API via curl
-curl https://api.openai.com/v1/audio/speech \
-  -H "Authorization: Bearer $OPENAI_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "tts-1",
-    "input": "Ever wondered how a thermos flask keeps tea piping hot? Heat naturally escapes in three ways: conduction, convection, and radiation...",
-    "voice": "alloy"
-  }' \
-  --output public/narration.mp3
-```
+Use narration you generated locally or already own. No paid service is required.
 
 ### 2. Extract Word Timestamps via Whisper
 
-Run OpenAI Whisper with word-level timestamps enabled:
-
-```bash
-# Using OpenAI Whisper CLI
-whisper public/narration.mp3 \
-  --model base \
-  --word_timestamps True \
-  --output_format json \
-  --output_dir .
-```
-
-Or using `faster-whisper` in Python:
-
-```python
-from faster_whisper import WhisperModel
-import json
-
-model = WhisperModel("base", device="cpu", compute_type="int8")
-segments, info = model.transcribe("public/narration.mp3", word_timestamps=True)
-
-words = []
-for segment in segments:
-    for word in segment.words:
-        words.append({
-            "text": word.word.strip(),
-            "start": round(word.start, 2),
-            "end": round(word.end, 2),
-            "confidence": round(word.probability, 2)
-        })
-
-with open("captions.json", "w", encoding="utf-8") as f:
-    json.dump(words, f, indent=2)
-
-print(f"Extracted {len(words)} word timestamps.")
-```
+Use word timestamps from your local transcription workflow. The kit makes no TTS or transcription requests. Whisper JSON may contain `segments[].words`, top-level `words`, or a raw word array; both `word` and `text` keys are accepted. Timestamps must already be ordered and nonoverlapping.
 
 ### 3. Assemble Your Timeline JSON
 
-Inject the generated word array into your timeline file:
-
-```json
-{
-  "fps": 30,
-  "width": 1080,
-  "height": 1920,
-  "audio": {
-    "src": "narration.mp3",
-    "volume": 1.0
-  },
-  "captions": [
-    { "text": "Ever", "start": 0.15, "end": 0.45 },
-    { "text": "wondered", "start": 0.45, "end": 0.95 }
-  ],
-  "scenes": [...]
-}
+```bash
+npm run build
+node bin/shorts-kit.mjs words-to-timeline tests/fixtures/whisper.json --out out/timeline.json
+node bin/shorts-kit.mjs validate out/timeline.json
 ```
 
-Audio and image paths in the timeline are resolved with Remotion's `staticFile()`, so `"narration.mp3"` (or `"/narration.mp3"`) means `public/narration.mp3`; `http(s)://` URLs are used as-is. Pass a timeline to the `ExplainerShort` composition with `--props`:
+The converter writes a valid, complete timeline with one scene and `Word[]` captions. Edit the scene artwork and add `audio: { "src": "narration.mp3" }` after placing your audio in `public/`. No audio is bundled.
+
+For Remotion's `--props` option, wrap the raw timeline in `{ "timeline": ... }`. For example, render the supplied timeline through the generic composition:
 
 ```bash
-npx remotion render src/index.ts ExplainerShort out/video.mp4 --props=my-props.json
+node --input-type=module -e "import fs from 'node:fs'; fs.writeFileSync('out/props.json', JSON.stringify({timeline: JSON.parse(fs.readFileSync('examples/demo-timeline.json','utf8'))}));"
+npx remotion render src/index.ts ExplainerShort out/custom.mp4 --props=out/props.json
 ```
 
-where `my-props.json` is `{ "timeline": { ... } }`. The video length is taken from the latest scene or caption end.
+Local audio/image paths resolve under `public/`; a missing file in Studio/CLI renders raises an error naming `public/<file>`. SSR/Player environments without a public-file manifest retain Remotion's URL resolution. HTTP(S), data, and blob URLs pass through and may load external content.
 
 ## Safe Area Specifications
 
-Vertical short platforms overlay native user interface elements that cover edges of the screen.
+At 1080×1920, reserve 200 px at the top, 480 px at the bottom, 60 px on the left, and 180 px on the right for critical content. Captions default to 500 px above the bottom. These are conservative guides; platform interfaces change, so inspect your target platform before publishing. Nonstandard canvas sizes need adjusted layout values.
 
-- **Top Danger Zone (0 to 200px)**: Covered by platform search bars, sound selector tags, and status icons.
-- **Right Danger Rail (920px to 1080px)**: Covered by action icons (Like, Dislike/Save, Comments, Share, Remix, Sound Disc).
-- **Bottom Danger Zone (1440px to 1920px)**: Covered by account profile pictures, follow buttons, titles, audio attributions, and progress scrubbers.
-- **Safe Content Box**: `left: 60px`, `top: 200px`, `right: 180px`, `bottom: 480px`. Keep all critical diagrams, pointer arrows, and character focal points within these bounds. Captions are kept inside that box by default: `positionBottom: 500` and a 180px right margin. The overlay is a development aid only: it is not drawn in final renders by default.
+## How It Works
+
+Zod fills defaults and checks timeline intervals. Frame time selects a scene and caption batch. React components render the artwork and frame-driven motion; Remotion exports the result. CLI output and library components use the same schema.
+
+## Assets and Licensing
+
+Pip and the supplied SVG illustrations are original project assets under [MIT](LICENSE). No copyrighted characters, bundled audio, or font files are included; typography uses system fonts. Third-party dependencies keep their own licenses. Review [Remotion's licensing terms](https://www.remotion.dev/license) for your use case.
+
+## Limitations and Privacy
+
+Default coordinates target 1080×1920. No narration or transcription engine is bundled. Timelines and CLI processing stay local; remote asset URLs load from their respective hosts. Use synthetic data in bug reports and keep personal data and credentials out of timelines you share.
 
 ## Project Structure
 
+- `src/index.ts`, `src/Root.tsx`: Studio/CLI registration and example compositions.
+- `src/library.ts`: library entry, emitted to `dist/` with declarations.
+- `src/components/`, `src/helpers/`, `src/schema.ts`: reusable rendering and validation.
+- `examples/`, `bin/`, `tests/`: timelines, local CLI, and offline tests.
+- `docs/demo.gif`: actual demo excerpt; `out/` is ignored.
+
+## Development
+
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run test -- --coverage
+npm run build
+npm pack --dry-run
+npx remotion still src/index.ts ThermosExplainer out/still.png --frame=60
+npx remotion compositions src/index.ts
 ```
-remotion-shorts-kit/
-├── .github/workflows/ci.yml    # Multi-platform GitHub Actions CI
-├── docs/demo-preview.svg       # Architecture and visual preview mockup
-├── examples/demo-timeline.json # 20-second thermos explanation timeline
-├── src/
-│   ├── assets/mascot/          # Raw SVG character assets
-│   ├── components/             # Reusable UI and video components
-│   │   ├── Arrow.tsx
-│   │   ├── Callout.tsx
-│   │   ├── Captions.tsx
-│   │   ├── Mascot.tsx
-│   │   ├── ProgressBar.tsx
-│   │   ├── SafeAreaOverlay.tsx
-│   │   ├── SceneRenderer.tsx
-│   │   └── ZoomTo.tsx
-│   ├── compositions/           # High-level Remotion compositions
-│   │   └── ExplainerShort.tsx
-│   ├── examples/               # Example implementations
-│   │   └── ThermosExplainer.tsx
-│   ├── helpers/                # Pure unit-tested algorithms
-│   │   ├── assets.ts
-│   │   ├── captions.ts
-│   │   ├── easing.ts
-│   │   ├── resolveAsset.ts
-│   │   ├── scene.ts
-│   │   └── time.ts
-│   ├── Root.tsx                # Remotion Root composition registrations
-│   ├── schema.ts               # Zod validation schemas and TypeScript types
-│   └── index.ts                # Main package entrypoint
-└── tests/                      # Vitest unit test suites
-```
+
+Tests build the library first for CLI coverage. Vitest enforces at least 80% statements, branches, functions, and lines per helper/schema file. CI runs Node 20/22/24 on Linux and Windows and uploads a Linux render-smoke still.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines, testing instructions, and commit conventions.
+Read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), [SECURITY.md](SECURITY.md), and [CHANGELOG.md](CHANGELOG.md). Use the [bug report](.github/ISSUE_TEMPLATE/bug_report.yml) or [feature request](.github/ISSUE_TEMPLATE/feature_request.yml) forms, follow the [PR checklist](.github/PULL_REQUEST_TEMPLATE.md), and see the [issue routing](.github/ISSUE_TEMPLATE/config.yml). [Dependabot](.github/dependabot.yml) checks npm and Actions weekly. Releases use the [tag workflow](.github/workflows/publish.yml) and npm trusted publishing.
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
-Copyright (c) 2026 Yusuf Berat Zengin.
+[MIT](LICENSE). Copyright (c) 2026 Yusuf Berat Zengin.

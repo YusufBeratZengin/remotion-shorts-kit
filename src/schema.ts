@@ -172,17 +172,53 @@ export type SafeAreaPlatform = z.infer<typeof SafeAreaPlatformSchema>;
 /**
  * Complete timeline schema describing the entire vertical short.
  */
-export const TimelineSchema = z.object({
-  fps: z.number().int().positive().default(30),
-  width: z.number().int().positive().default(1080),
-  height: z.number().int().positive().default(1920),
-  scenes: z.array(SceneSchema).min(1),
-  captions: z.array(WordSchema).default([]),
-  audio: AudioConfigSchema.optional(),
-  captionStyle: CaptionStyleSchema.default(DEFAULT_CAPTION_STYLE),
-  showSafeArea: z.boolean().default(false),
-  showProgressBar: z.boolean().default(true),
-});
+export const TimelineSchema = z
+  .object({
+    fps: z.number().int().positive().default(30),
+    width: z.number().int().positive().default(1080),
+    height: z.number().int().positive().default(1920),
+    scenes: z.array(SceneSchema).min(1),
+    captions: z.array(WordSchema).default([]),
+    audio: AudioConfigSchema.optional(),
+    captionStyle: CaptionStyleSchema.default(DEFAULT_CAPTION_STYLE),
+    showSafeArea: z.boolean().default(false),
+    showProgressBar: z.boolean().default(true),
+  })
+  .superRefine((timeline, ctx) => {
+    for (let index = 1; index < timeline.captions.length; index++) {
+      const previous = timeline.captions[index - 1];
+      const word = timeline.captions[index];
+      if (!previous || !word) continue;
+      if (word.start < previous.start) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["captions", index, "start"],
+          message: "Caption words must be sorted by start time",
+        });
+      } else if (word.start < previous.end) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["captions", index, "start"],
+          message: "Caption words must not overlap",
+        });
+      }
+    }
+    // Sorting a copy preserves the supplied scene order and JSON format.
+    const scenes = timeline.scenes
+      .map((scene, index) => ({ scene, index }))
+      .sort((a, b) => a.scene.start - b.scene.start);
+    let latestEnd = -1;
+    for (const { scene, index } of scenes) {
+      if (scene.start < latestEnd) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["scenes", index, "start"],
+          message: "Scenes must not overlap",
+        });
+      }
+      latestEnd = Math.max(latestEnd, scene.end);
+    }
+  });
 export type Timeline = z.infer<typeof TimelineSchema>;
 
 export const ExplainerPropsSchema = z.object({
@@ -194,8 +230,29 @@ export type ExplainerProps = z.infer<typeof ExplainerPropsSchema>;
  * Validates unknown timeline data against TimelineSchema.
  * Throws ZodError if validation fails.
  */
-export function validateTimeline(data: unknown): Timeline {
+export function parseTimeline(data: unknown): Timeline {
   return TimelineSchema.parse(data);
+}
+
+export type TimelineValidation =
+  | { ok: true; errors: []; data: Timeline }
+  | { ok: false; errors: string[] };
+
+/** Reports every validation issue with a JSON path, without throwing. */
+export function validateTimeline(data: unknown): TimelineValidation {
+  const result = TimelineSchema.safeParse(data);
+  if (result.success) return { ok: true, errors: [], data: result.data };
+  return {
+    ok: false,
+    errors: result.error.issues.map((issue) => {
+      const path = issue.path.reduce<string>(
+        (value, part) =>
+          typeof part === "number" ? `${value}[${part}]` : `${value}.${String(part)}`,
+        "$",
+      );
+      return `${path}: ${issue.message}`;
+    }),
+  };
 }
 
 /**

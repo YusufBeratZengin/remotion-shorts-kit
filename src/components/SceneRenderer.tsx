@@ -1,12 +1,12 @@
 import type React from "react";
 import { useCurrentFrame, useVideoConfig } from "remotion";
-import { resolveAsset } from "../helpers/resolveAsset";
-import { framesToSeconds, secondsToFrames } from "../helpers/time";
-import type { Scene } from "../schema";
-import { Arrow } from "./Arrow";
-import { Callout } from "./Callout";
-import { Mascot } from "./Mascot";
-import { ZoomTo } from "./ZoomTo";
+import { resolveAsset } from "../helpers/resolveAsset.js";
+import { framesToSeconds, secondsToFrames } from "../helpers/time.js";
+import type { Scene } from "../schema.js";
+import { Arrow } from "./Arrow.js";
+import { Callout } from "./Callout.js";
+import { Mascot } from "./Mascot.js";
+import { ZoomTo } from "./ZoomTo.js";
 
 export interface SceneRendererProps {
   scene: Scene;

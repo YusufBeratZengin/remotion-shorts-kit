@@ -10,8 +10,8 @@
 
 If you discover a potential security vulnerability within this project, please report it responsibly rather than opening a public issue.
 
-Please email vulnerability details to the project maintainer or contact via private channel:
-- Contact: `118852217+YusufBeratZengin@users.noreply.github.com`
+Use [GitHub private vulnerability reporting](https://github.com/YusufBeratZengin/remotion-shorts-kit/security/advisories/new).
+Do not include personal data or credentials in public issues.
 
 Include the following information in your report:
 - Type of vulnerability

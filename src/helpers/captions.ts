@@ -1,4 +1,4 @@
-import type { Word } from "../schema";
+import type { Word } from "../schema.js";
 
 export interface CaptionBatch {
   id: string;

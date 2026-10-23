@@ -1,5 +1,5 @@
-import type { Scene } from "../schema";
-import { clamp, framesToSeconds, secondsToFrames } from "./time";
+import type { Scene } from "../schema.js";
+import { clamp, framesToSeconds, secondsToFrames } from "./time.js";
 
 /**
  * Finds the scene active at the given timestamp in seconds.

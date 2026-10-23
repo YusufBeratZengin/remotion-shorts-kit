@@ -1,13 +1,13 @@
 import { registerRoot } from "remotion";
-import { RemotionRoot } from "./Root";
+import { RemotionRoot } from "./Root.js";
 
 // Register Remotion Root for CLI and Studio
 registerRoot(RemotionRoot);
 
 // Re-export everything for library usage
-export * from "./schema";
-export * from "./helpers";
-export * from "./components";
-export * from "./compositions";
-export * from "./examples";
+export * from "./schema.js";
+export * from "./helpers/index.js";
+export * from "./components/index.js";
+export * from "./compositions/index.js";
+export * from "./examples/index.js";
 export { RemotionRoot };

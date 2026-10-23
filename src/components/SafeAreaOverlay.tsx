@@ -1,6 +1,6 @@
 import type React from "react";
 import { getRemotionEnvironment } from "remotion";
-import type { SafeAreaPlatform } from "../schema";
+import type { SafeAreaPlatform } from "../schema.js";
 
 export interface SafeAreaOverlayProps {
   visible?: boolean;

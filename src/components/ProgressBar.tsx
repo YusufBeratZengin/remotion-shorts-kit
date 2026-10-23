@@ -1,6 +1,6 @@
 import type React from "react";
 import { useCurrentFrame, useVideoConfig } from "remotion";
-import { clamp } from "../helpers/time";
+import { clamp } from "../helpers/time.js";
 
 export interface ProgressBarProps {
   position?: "top" | "bottom";

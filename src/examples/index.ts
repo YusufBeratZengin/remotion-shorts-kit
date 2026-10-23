@@ -1,1 +1,2 @@
-export * from "./ThermosExplainer";
+export * from "./ThermosExplainer.js";
+export * from "./SiphonExplainer.js";

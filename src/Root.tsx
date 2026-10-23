@@ -1,9 +1,10 @@
 import type React from "react";
 import { type CalculateMetadataFunction, Composition } from "remotion";
-import { ExplainerShort, type ExplainerShortProps } from "./compositions/ExplainerShort";
-import { ThermosExplainer, demoTimeline } from "./examples/ThermosExplainer";
-import { timelineDurationInFrames } from "./helpers/scene";
-import { ExplainerPropsSchema, type Timeline } from "./schema";
+import { ExplainerShort, type ExplainerShortProps } from "./compositions/ExplainerShort.js";
+import { SiphonExplainer, siphonTimeline } from "./examples/SiphonExplainer.js";
+import { ThermosExplainer, demoTimeline } from "./examples/ThermosExplainer.js";
+import { timelineDurationInFrames } from "./helpers/scene.js";
+import { ExplainerPropsSchema, type Timeline } from "./schema.js";
 
 /**
  * Derives fps, size and duration from the timeline itself, so editing the JSON
@@ -35,6 +36,15 @@ export const RemotionRoot: React.FC = () => {
         fps={demoTimeline.fps}
         width={demoTimeline.width}
         height={demoTimeline.height}
+      />
+
+      <Composition
+        id="SiphonExplainer"
+        component={SiphonExplainer}
+        durationInFrames={timelineDurationInFrames(siphonTimeline)}
+        fps={siphonTimeline.fps}
+        width={siphonTimeline.width}
+        height={siphonTimeline.height}
       />
 
       {/* Generic Dynamic Explainer Short with Schema Controls in Studio */}

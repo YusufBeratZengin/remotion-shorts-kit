@@ -1,4 +1,4 @@
-import { clamp } from "./time";
+import { clamp } from "./time.js";
 
 /**
  * Standard easing functions normalized for t in [0, 1].

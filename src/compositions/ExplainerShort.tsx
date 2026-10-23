@@ -1,11 +1,11 @@
 import type React from "react";
 import { useMemo } from "react";
 import { Audio, useCurrentFrame, useVideoConfig } from "remotion";
-import { Captions, ProgressBar, SafeAreaOverlay, SceneRenderer } from "../components";
-import { resolveAsset } from "../helpers/resolveAsset";
-import { getActiveScene } from "../helpers/scene";
-import { framesToSeconds } from "../helpers/time";
-import { DEFAULT_CAPTION_STYLE, type Timeline, validateTimeline } from "../schema";
+import { Captions, ProgressBar, SafeAreaOverlay, SceneRenderer } from "../components/index.js";
+import { resolveAsset } from "../helpers/resolveAsset.js";
+import { getActiveScene } from "../helpers/scene.js";
+import { framesToSeconds } from "../helpers/time.js";
+import { DEFAULT_CAPTION_STYLE, type Timeline, parseTimeline } from "../schema.js";
 
 export type ExplainerShortProps = {
   timeline: Timeline;
@@ -18,7 +18,7 @@ export const ExplainerShort: React.FC<ExplainerShortProps> = ({ timeline: rawTim
   const currentTimeSec = framesToSeconds(currentFrame, fps);
 
   const timeline = useMemo(() => {
-    return validateTimeline(rawTimeline);
+    return parseTimeline(rawTimeline);
   }, [rawTimeline]);
 
   const activeScene = useMemo(() => {

@@ -1,43 +1,62 @@
 # remotion-shorts-kit
+[![CI](https://github.com/YusufBeratZengin/remotion-shorts-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/YusufBeratZengin/remotion-shorts-kit/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/remotion-shorts-kit)](https://www.npmjs.com/package/remotion-shorts-kit) [![MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE) [![Remotion 4](https://img.shields.io/badge/Remotion-4-blue)](https://www.remotion.dev/) [![Node](https://img.shields.io/badge/node-%3E%3D20-green)](package.json)
+[English](README.md) | [Türkçe](README.tr.md)
 
-1080x1920 dikey açıklayıcı (explainer) videoları programatik olarak üretmek için açık kaynak Remotion başlangıç kiti.
+Remotion 4 ve strict TypeScript ile 1080×1920 dikey anlatım videoları üreten; klonlanarak başlangıç kiti, kurulup React kütüphanesi olarak kullanılabilen bir proje.
+Tip güvenli JSON timeline, güvenli alanı gözeten kelime bazlı altyazılar ve yalnızca özgün görseller, içeriği tekrar kullanılabilir ve tutarlı tutar.
+Kütüphaneyi kurun: `npm install remotion-shorts-kit react@18 react-dom@18 remotion@4`
+Kurulumdan sonra CLI'ı deneyin: `npx shorts-kit validate node_modules/remotion-shorts-kit/examples/demo-timeline.json`
+![Render alınmış termos anlatımından yedi saniyelik kesit](docs/demo.gif)
 
-![remotion-shorts-kit önizleme](docs/demo-preview.svg)
+## Demo
+
+GIF, gerçek 20 saniyelik `ThermosExplainer` çıktısından alınmış 540×960 bir kesittir; boyutu 3 MB'ın altındadır. [Durağan alternatif](docs/demo-preview.svg).
+
+JSON → şema varsayılanları ve doğrulama → kompozisyon:
+
+```tsx
+import { ExplainerShort, TimelineSchema } from "remotion-shorts-kit";
+
+const timeline = TimelineSchema.parse({
+  scenes: [{ id: "intro", start: 0, end: 5, background: "#0f172a" }],
+  captions: [{ text: "Merhaba!", start: 0.2, end: 1.2 }],
+});
+export const MyShort = () => <ExplainerShort timeline={timeline} />;
+```
+
+`MyShort` bileşenini kendi Remotion projenizin root'unda kaydedin. Kütüphaneyi import etmek root kaydı yapmaz ve örnek kompozisyonları yüklemez.
 
 ## Genel Bakış
 
-YouTube Shorts, TikTok ve Instagram Reels için teknik veya bilimsel mekanizmaları anlatan dikey videolar üretmek son derece popülerdir. Ancak geliştiriciler ve içerik üreticileri her projede aynı altyapıyı sıfırdan kurmak zorunda kalır: kelime seviyesinde vurgulanan altyazı motoru, sahne zaman çizelgesi, maskot poz geçişleri, yönlendirme okları, vurgu kartları ve platform güvenli alan sınırları.
-
-`remotion-shorts-kit`, Remotion 4, React, katı TypeScript modu ve Zod üzerine inşa edilmiş tip güvenli ve test edilmiş bir temel sağlar. İçerik ve yaratıcı varlıkları render mantığından tamamen ayırarak video üretimini yapılandırılmış JSON verisiyle yönetmenize olanak tanır.
+Sahne sıralaması, altyazı düzeni, maskot pozları, bilgi kartları, oklar ve kamera hareketleri için altyapı kurmak yerine timeline'ı düzenleyin. Studio ve örnek kompozisyonlar için depoyu klonlayın; mevcut Remotion projenizde ise bileşenleri import edin.
 
 ## Özellikler
 
-- **Veri Odaklı Mimari**: Zod ile doğrulanmış tam kapsamlı zaman çizelgesi şeması (`src/schema.ts`).
-- **Kelime Seviyesinde Animasyonlu Altyazılar**: Kelime zaman damgalarıyla senkronize, akıllı 1-2 satır bölme, duraklama algılama, güvenli alan hizalaması ve aktif kelime vurgulama efekti.
-- **SVG Maskot Sistemi**: Orijinal geometrik robot karakter ("Pip"), 5 farklı poz (`idle`, `talking`, `explaining`, `thinking`, `surprised`) ve esneme/sıçrama giriş dinamikleri.
-- **Görsel Vurgu ve İşaretçiler**: Yay mekanizmalı `<Callout>` bilgi kartları, dikkat çeken titreşimli `<Arrow>` bezier okları ve `<ZoomTo>` kamera odaklama bileşenleri.
-- **Güvenli Alan Kılavuzu**: Shorts/TikTok/Reels arayüzünden kaçınmak için temkinli bir bölgeyi gösteren, yalnız Studio'da görünen katman (`<SafeAreaOverlay>`). `showInRender` ile açıkça istemedikçe `remotion render` çıktısına girmez. `platform` özelliği yalnız etiketi değiştirir; ölçüler ortak ve temkinlidir.
-- **Kapsamlı Test Kapsamına Sahip Saf Yardımcılar**: Zaman-kare dönüşümü, satır bölme, sahne arama ve yumuşatma eğrileri için birim testleri.
-- **Üretime Hazır Render Altyapısı**: Remotion Studio ile canlı inceleme ve Remotion CLI ile MP4 dışa aktarma komutları; kompozisyon süresi, fps ve boyut timeline'dan hesaplanır.
+- Bileşenler, yardımcılar ve timeline için Zod şemaları ve TypeScript bildirimleri.
+- Kareye göre kelime vurgusu, önbelleğe alınan satır düzeni ve duraklamaya göre altyazı grupları.
+- Beş pozuyla özgün SVG robot Pip: idle, talking, explaining, thinking ve surprised.
+- Bilgi kartları, eğri oklar, kamera odağı, ilerleme çubuğu ve güvenli alan kılavuzu.
+- Timeline doğrulama ve Whisper kelimelerini dönüştürme için yerel CLI.
+
+## Kurulum
+
+Kütüphane kullanımı için yukarıdaki komutla paketi ve React 18 / Remotion 4 peer bağımlılıklarını kurun. Zod çalışma zamanı bağımlılığıdır. Paket ESM kullanır; CommonJS `require()` desteklenmez. npm rozeti registry'deki durumu gösterir; ilk yayına kadar başlangıç kitinin kaynak kodunu kullanın.
 
 ## Hızlı Başlangıç
 
 ### Gereksinimler
 
-- Node.js >= 20.0.0
-- npm >= 10.0.0
+Node.js 20 veya üzeri ve npm gerekir. Render için desteklenen bir Chromium kurulumu da gerekir; Remotion ilk render sırasında tarayıcı indirebilir.
 
-### Kurulum
+### Depoyu Kurma
 
 ```bash
 git clone https://github.com/YusufBeratZengin/remotion-shorts-kit.git
 cd remotion-shorts-kit
-npm install
+npm ci
 ```
 
 ### Studio'yu Başlatma
-
-Animasyonları, sahne geçişlerini ve düzeni görsel olarak test etmek için etkileşimli Remotion Studio'yu açın:
 
 ```bash
 npm run studio
@@ -45,275 +64,167 @@ npm run studio
 
 ### Demo Videoyu Render Alma
 
-"Termos Çayı Nasıl Sıcak Tutar?" konulu 20 saniyelik 1080x1920 demo kompozisyonunu `out/demo.mp4` olarak render alın:
-
 ```bash
 npm run render:demo
+npm run render:example2
 ```
+
+Çıktılar: `out/demo.mp4` (20 saniye) ve `out/siphon.mp4` (15 saniye); ikisi de 1080×1920, 30 fps. Örnekler sessizdir; seslendirmeyi siz ekleyin.
 
 ### Test ve Kod Kalitesi
 
+Tüm kontroller [Geliştirme](#geliştirme) bölümündedir.
+
+## Kullanım
+
+Kurulu `shorts-kit` komutu doğrudan timeline JSON dosyası alır:
+
 ```bash
-# Vitest birim testlerini çalıştır
-npm run test
-
-# Katı TypeScript derleyici denetimi
-npm run typecheck
-
-# Biome linter denetimi
-npm run lint
-
-# Biome format ve linter düzeltmelerini otomatik uygula
-npm run lint:fix
+node bin/shorts-kit.mjs validate examples/demo-timeline.json
 ```
+
+Kurulu pakette `node bin/shorts-kit.mjs` yerine `npx shorts-kit` kullanın. Bozuk JSON, şema hatası veya geçersiz argüman çıkış kodunu 1 yapar. Doğrulama mesajları `$.captions[1].start` gibi JSON yolları içerir.
+
+`TimelineSchema.parse(json)` ve `parseTimeline(json)` varsayılanları uygulanmış timeline döndürür; geçersiz veride hata fırlatır. `validateTimeline(json)`, `{ ok: true, errors: [], data }` veya `{ ok: false, errors: string[] }` döndürür. `safeParseTimeline`, Zod sonuç biçimini korur.
+
+## Örnekler
+
+- [Termos timeline'ı](examples/demo-timeline.json): ısı aktarımı, 20 saniye; `ThermosExplainer`.
+- [Sifon timeline'ı](examples/second-timeline.json): dolu boru, aşağıdaki çıkış ve havanın akışı kesmesi, 15 saniye; `SiphonExplainer`, iki maskot pozu.
+- [Whisper test verisi](tests/fixtures/whisper.json): CLI'ı denemek için yapay kelime zaman damgaları.
 
 ## Zaman Çizelgesi (Timeline) JSON Referansı
 
-Tüm video akışı bir `Timeline` nesnesi ile yönetilir. Şema `src/schema.ts` dosyasında Zod ile tanımlanmıştır.
+Tam şema [src/schema.ts](src/schema.ts) dosyasındadır. Sahne sırası korunur; sahneler zaman olarak çakışamaz. Altyazı kelimeleri sıralı olmalı ve çakışmamalıdır. Bir öğenin bittiği anda diğeri başlayabilir.
 
 ### Ana Alanlar
 
-| Alan | Tip | Varsayılan | Açıklama |
-| --- | --- | --- | --- |
-| `fps` | `number` | `30` | Saniye başına kare sayısı. |
-| `width` | `number` | `1080` | Video piksel genişliği. |
-| `height` | `number` | `1920` | Video piksel yüksekliği. |
-| `scenes` | `Scene[]` | (Zorunlu) | Sıralı sahne listesi. |
-| `captions` | `Word[]` | `[]` | Kelime bazlı zaman damgalı transkripsiyon. |
-| `audio` | `AudioConfig` | `undefined` | İsteğe bağlı seslendirme veya müzik dosyası. |
-| `captionStyle`| `CaptionStyle`| `{}` | Altyazı tipografi ve görsel stil ayarları. |
-| `showProgressBar` | `boolean` | `true` | Alt veya üst ilerleme çubuğu. |
-| `showSafeArea` | `boolean` | `false` | Güvenli alan kılavuzu (yalnız Studio/Player; `remotion render` çıktısında görünmez). |
+| Alan | Varsayılan | Anlamı |
+| --- | --- | --- |
+| `scenes` | zorunlu | `id`, `start`, `end`, `background` içeren, boş olmayan sahne dizisi |
+| `fps`, `width`, `height` | `30`, `1080`, `1920` | Kare hızı ve tuval boyutu |
+| `captions` | `[]` | Kelimeler: `{ text, start, end, confidence? }`; süreler saniye |
+| `audio` | yok | `{ src, volume: 1, startOffset: 0 }`; başlangıç ofseti saniye |
+| `captionStyle` | şema varsayılanları | Yazı tipi, vurgu, satır düzeni ve altyazı konumu |
+| `showSafeArea` | `false` | Studio/Player kılavuzu; son çıktıda varsayılan olarak gizli |
+| `showProgressBar` | `true` | Oynatma ilerlemesi |
 
 ### Sahne Tanımı Örneği
 
-```json
-{
-  "id": "scene-1-intro",
-  "start": 0.0,
-  "end": 4.0,
-  "background": "linear-gradient(180deg, #0f172a 0%, #1e293b 100%)",
-  "title": "Sıcak Çay Gizemi",
-  "mascot": {
-    "pose": "thinking",
-    "x": 540,
-    "y": 1320,
-    "scale": 1.15,
-    "flip": false
-  },
-  "elements": [
-    {
-      "type": "callout",
-      "id": "temp-callout",
-      "x": 540,
-      "y": 660,
-      "title": "Buharı Üstünde",
-      "text": "Bir termos çayı 12 saat boyunca nasıl sıcak tutar?",
-      "accentColor": "#f59e0b"
-    }
-  ]
-}
-```
+Her sahnede `id`, `start`, `end` (saniye) ve CSS `background` bulunur. `title`, `mascot` ve `elements` isteğe bağlıdır. `mascot`, `{ pose, x, y, scale: 1, flip: false }` alır. `x`/`y` tuval koordinatlarıdır.
 
 ### Sahne Elemanları
 
-- **Callout (`type: "callout"`)**: Vurgu çizgisi, başlık, metin ve isteğe bağlı simge içeren bilgi kartı.
-- **Arrow (`type: "arrow"`)**: `(fromX, fromY)` noktasından `(toX, toY)` noktasına uzanan kavisli/düz yön oku.
-- **Zoom (`type: "zoom"`)**: Sahne esnasında kamerayı belirli koordinatlara yaklaştıran odak bileşeni.
+- `callout`: `id`, `x`, `y`, `text`; isteğe bağlı `title`, `icon` ve renkler.
+- `arrow`: `id`, `fromX`, `fromY`, `toX`, `toY`; isteğe bağlı etiket, renk, çizgi kalınlığı ve eğrilik.
+- `zoom`: `id`, `targetX`, `targetY`; isteğe bağlı `scale` ve `durationFrames`.
+
+Tüm öğeler sahnenin başlangıcına göre saniye cinsinden `start`/`end` ofseti alabilir. Bitiş anı aralığa dahil değildir.
 
 ## Bileşen Özellikleri (Props)
 
+Dışa aktarılan tüm prop tipleri için [bileşen bildirimlerine ve kaynak koduna](src/components/index.ts) bakın. Kütüphane ve başlangıç kiti aynı bileşen prop'larını kullanır.
+
 ### `<Captions>`
 
-Altyazıları 1-2 satırlık bloklara bölerek kelime kelime vurgulayan bileşen.
-
-| Prop | Tip | Varsayılan | Açıklama |
-| --- | --- | --- | --- |
-| `captions` | `Word[]` | (Zorunlu) | `{ text, start, end }` dizisi. |
-| `style` | `Partial<CaptionStyle>` | `{}` | Görsel stil geçersiz kılmaları. |
-| `batchingOptions` | `BatchingOptions` | `{}` | Satır bölme sınırları (maksimum karakter, satır sayısı, duraklama süresi). |
-| `className` | `string` | `undefined` | İsteğe bağlı CSS sınıfı. |
+`captions: Word[]` zorunludur. `style: Partial<CaptionStyle>`, `batchingOptions` ve `className` isteğe bağlıdır. Varsayılan düzen iki satır, satır başına 18 karakter, alttan 500 px ve soldan/sağdan 60/180 px boşluktur.
 
 ### `<Mascot>`
 
-Poz değişimlerinde esneme ve yaylanma animasyonu yapan orijinal vektör karakter.
-
-| Prop | Tip | Varsayılan | Açıklama |
-| --- | --- | --- | --- |
-| `pose` | `MascotPose` | (Zorunlu) | `"idle"` \| `"talking"` \| `"explaining"` \| `"thinking"` \| `"surprised"`. |
-| `x` | `number` | (Zorunlu) | Yatay merkez koordinatı (piksel). |
-| `y` | `number` | (Zorunlu) | Dikey merkez koordinatı (piksel). |
-| `scale` | `number` | `1` | Ölçek katsayısı. |
-| `flip` | `boolean` | `false` | Karakteri yatayda aynalar. |
-| `enterFrame` | `number` | `useCurrentFrame()` | Giriş yay animasyonunun başlangıç karesi. |
+`pose`, `x`, `y` zorunlu; `scale`, `flip`, `enterFrame`, `className` ve `style` isteğe bağlıdır. Poz değişince SVG görseli değişir.
 
 ### `<Callout>`
 
-Yaylanarak beliren görsel açıklama kartı.
-
-| Prop | Tip | Varsayılan | Açıklama |
-| --- | --- | --- | --- |
-| `text` | `string` | (Zorunlu) | Açıklama metni. |
-| `x` | `number` | (Zorunlu) | Kart merkez yatay konumu. |
-| `y` | `number` | (Zorunlu) | Kart merkez dikey konumu. |
-| `title` | `string` | `undefined` | Kart başlığı. |
-| `icon` | `string` | `undefined` | Sol rozet simgesi. |
-| `accentColor` | `string` | `"#38bdf8"` | Kenarlık ve vurgu rengi. |
-| `backgroundColor` | `string` | `"rgba(15,23,42,0.90)"` | Kart arka plan rengi. |
+`text`, `x`, `y` zorunlu; `title`, `icon`, `accentColor`, `backgroundColor`, `textColor` ve giriş animasyonu prop'ları isteğe bağlıdır.
 
 ### `<Arrow>`
 
-İki nokta arasında çizilen animasyonlu yönlendirme oku.
-
-| Prop | Tip | Varsayılan | Açıklama |
-| --- | --- | --- | --- |
-| `fromX` | `number` | (Zorunlu) | Başlangıç X koordinatı. |
-| `fromY` | `number` | (Zorunlu) | Başlangıç Y koordinatı. |
-| `toX` | `number` | (Zorunlu) | Hedef X koordinatı. |
-| `toY` | `number` | (Zorunlu) | Hedef Y koordinatı. |
-| `label` | `string` | `undefined` | Ok gövdesinde duran açıklama etiketi. |
-| `color` | `string` | `"#f59e0b"` | Ok çizgi ve uç rengi. |
-| `strokeWidth` | `number` | `8` | Çizgi kalınlığı. |
-| `curvature` | `number` | `0` | Kavis payı (0 düz çizgidir). |
+`fromX`, `fromY`, `toX`, `toY` zorunlu; `label`, `color`, `strokeWidth`, `curvature` ve giriş animasyonu prop'ları isteğe bağlıdır.
 
 ### `<ZoomTo>`
 
-İçeriği belirli bir hedefe doğru yaklaştıran kamera bileşeni.
-
-| Prop | Tip | Varsayılan | Açıklama |
-| --- | --- | --- | --- |
-| `targetX` | `number` | (Zorunlu) | Odaklanılacak X koordinatı. |
-| `targetY` | `number` | (Zorunlu) | Odaklanılacak Y koordinatı. |
-| `scale` | `number` | `1.3` | Yakınlaşma ölçeği. |
-| `startFrame` | `number` | `0` | Yakınlaşmanın başlayacağı kare. |
-| `durationFrames` | `number` | `30` | Geçiş süresi (kare cinsinden). |
-| `children` | `ReactNode` | (Zorunlu) | Yakınlaştırılacak sahne elemanları. |
+`targetX`, `targetY`, `children` zorunlu; `scale`, `startFrame` ve `durationFrames` isteğe bağlıdır.
 
 ### `<ProgressBar>`
 
-Video oynatma sürecini gösteren ilerleme çubuğu.
-
-| Prop | Tip | Varsayılan | Açıklama |
-| --- | --- | --- | --- |
-| `position` | `"top"` \| `"bottom"` | `"bottom"` | Ekrandaki konumu. |
-| `height` | `number` | `8` | Çubuk kalınlığı (piksel). |
-| `color` | `string` | `"#38bdf8"` | Dolgu rengi. |
-| `backgroundColor` | `string` | `"rgba(255,255,255,0.18)"` | Ray rengi. |
+`position` (`top`/`bottom`), `height`, `color` ve `backgroundColor` isteğe bağlıdır.
 
 ### `<SafeAreaOverlay>`
 
-Dikey platform arayüz güvenli alanlarını gösteren denetim katmanı.
-
-| Prop | Tip | Varsayılan | Açıklama |
-| --- | --- | --- | --- |
-| `visible` | `boolean` | `false` | Katmanın gösterilip gösterilmeyeceği. |
-| `platform` | `SafeAreaPlatform` | `"all"` | `"all"` \| `"youtube-shorts"` \| `"tiktok"` \| `"instagram-reels"`. |
-| `opacity` | `number` | `0.85` | Kılavuz opaklığı. |
-| `showInRender` | `boolean` | `false` | Katmanı `remotion render` / `remotion still` çıktısına da çizer. |
+`visible`, `platform`, `opacity`, `showInRender`, `className` ve `style` isteğe bağlıdır. `platform` etiketi değiştirir; tüm platformlar ortak, temkinli ölçüler kullanır. Kılavuzun çıktıda görünmesi için `visible` ve `showInRender` birlikte açılmalıdır.
 
 ## Kendi Seslendirmeniz (TTS) ve Whisper Kelime Zaman Damgalarını Kullanma
 
-Kit, otomatik seslendirme ve transkripsiyon boru hatlarıyla kolayca birleşecek biçimde tasarlanmıştır.
-
 ### 1. Seslendirmenin Üretilmesi (Örn. OpenAI TTS veya ElevenLabs)
 
-```bash
-# OpenAI TTS API ile ses dosyası oluşturma
-curl https://api.openai.com/v1/audio/speech \
-  -H "Authorization: Bearer $OPENAI_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "tts-1",
-    "input": "Bir termos çayı nasıl saatlerce sıcak tutar? Isı iletim, taşınım ve ışıma olmak üzere üç yolla yayılır...",
-    "voice": "alloy"
-  }' \
-  --output public/seslendirme.mp3
-```
+Yerelde ürettiğiniz veya kullanım hakkına sahip olduğunuz seslendirmeyi kullanın. Ücretli servis gerekmez.
 
 ### 2. Whisper ile Kelime Seviyesinde Zaman Damgası Çıkarma
 
-Python'da `faster-whisper` kullanarak kelime zaman damgalarını JSON formatında kaydedin:
-
-```python
-from faster_whisper import WhisperModel
-import json
-
-model = WhisperModel("base", device="cpu", compute_type="int8")
-segments, info = model.transcribe("public/seslendirme.mp3", word_timestamps=True)
-
-words = []
-for segment in segments:
-    for word in segment.words:
-        words.append({
-            "text": word.word.strip(),
-            "start": round(word.start, 2),
-            "end": round(word.end, 2),
-            "confidence": round(word.probability, 2)
-        })
-
-with open("captions.json", "w", encoding="utf-8") as f:
-    json.dump(words, f, indent=2, ensure_ascii=False)
-
-print(f"{len(words)} adet kelime zaman damgası çıkarıldı.")
-```
+Yerel transkripsiyon akışınızdan gelen kelime zamanlarını kullanın. Kit, TTS veya transkripsiyon servisine istek göndermez. Whisper JSON dosyası `segments[].words`, üst düzey `words` veya doğrudan kelime dizisi içerebilir. Hem `word` hem `text` anahtarı kabul edilir. Zamanlar önceden sıralanmış ve çakışmasız olmalıdır.
 
 ### 3. Zaman Çizelgesi JSON'ına Entegre Etme
 
-Oluşturulan kelime dizisini timeline dosyanıza yerleştirin:
-
-```json
-{
-  "fps": 30,
-  "width": 1080,
-  "height": 1920,
-  "audio": {
-    "src": "/seslendirme.mp3",
-    "volume": 1.0
-  },
-  "captions": [
-    { "text": "Bir", "start": 0.15, "end": 0.40 },
-    { "text": "termos", "start": 0.40, "end": 0.85 }
-  ],
-  "scenes": [...]
-}
+```bash
+npm run build
+node bin/shorts-kit.mjs words-to-timeline tests/fixtures/whisper.json --out out/timeline.json
+node bin/shorts-kit.mjs validate out/timeline.json
 ```
 
-Ardından `npm run render:demo` veya kendi render komutunuz ile videonuzu oluşturun.
+Dönüştürücü, tek sahneli ve `Word[]` altyazılı geçerli bir timeline üretir. Sahne görsellerini düzenleyin; ses dosyanızı `public/` altına koyduktan sonra `audio: { "src": "narration.mp3" }` ekleyin. Pakette ses dosyası yoktur.
+
+Remotion'ın `--props` seçeneği için timeline'ı `{ "timeline": ... }` içine alın. Örneğin, hazır timeline'ı genel kompozisyonla render edin:
+
+```bash
+node --input-type=module -e "import fs from 'node:fs'; fs.writeFileSync('out/props.json', JSON.stringify({timeline: JSON.parse(fs.readFileSync('examples/demo-timeline.json','utf8'))}));"
+npx remotion render src/index.ts ExplainerShort out/custom.mp4 --props=out/props.json
+```
+
+Yerel ses/görsel yolları `public/` altında çözülür. Studio/CLI renderında dosya eksikse hata `public/<dosya>` yolunu belirtir. Public dosya listesi olmayan SSR/Player ortamlarında Remotion'ın URL çözümlemesi kullanılır. HTTP(S), data ve blob URL'leri aynen iletilir; dışarıdan içerik yükleyebilir.
 
 ## Dikey Video Güvenli Alan Standartları
 
-Dikey video platformlarında ekranın kenarları kullanıcı arayüzü butonları ile kaplıdır:
+1080×1920 tuvalde kritik içerik için üstte 200 px, altta 480 px, solda 60 px ve sağda 180 px ayırın. Altyazılar varsayılan olarak alttan 500 px yukarıdadır. Bu ölçüler temkinli bir kılavuzdur; platform arayüzleri değiştiği için yayımlamadan önce hedef platformda kontrol edin. Farklı tuval boyutlarında yerleşim değerlerini düzenleyin.
 
-- **Üst Risk Bölgesi (0 - 200px)**: Arama kutusu, ses seçici ve durum simgeleri yer alır.
-- **Sağ Risk Sütunu (920px - 1080px)**: Beğeni, yorum, paylaşma ve müzik simgeleri bulunur.
-- **Alt Risk Bölgesi (1440px - 1920px)**: Profil resmi, takip butonu, video başlığı ve ilerleme çubuğu yer alır.
-- **Güvenli İçerik Alanı**: `sol: 60px`, `üst: 200px`, `sağ: 180px`, `alt: 480px`. Tüm temel çizimler, oklar ve maskot bu sınırın içinde tutulmalıdır. Altyazılar varsayılan olarak `positionBottom: 500` ve 180px sağ boşlukla bu kutunun içinde kalır. Katman yalnız geliştirme aracıdır; son render'a varsayılan olarak girmez.
+## Nasıl Çalışır?
+
+Zod varsayılanları uygular ve zaman aralıklarını denetler. Kare zamanı, sahneyi ve altyazı grubunu seçer. React bileşenleri görselleri ve kareye bağlı hareketleri çizer; Remotion sonucu dışa aktarır. CLI çıktısı ve kütüphane bileşenleri aynı şemayı kullanır.
+
+## Görseller ve Lisanslama
+
+Pip ve projedeki SVG çizimleri özgün varlıklardır; [MIT](LICENSE) kapsamındadır. Telifli karakter, ses veya font dosyası paketlenmez; sistem fontları kullanılır. Üçüncü taraf bağımlılıkların kendi lisansları geçerlidir. Kullanımınıza göre [Remotion lisans koşullarını](https://www.remotion.dev/license) inceleyin.
+
+## Sınırlamalar ve Gizlilik
+
+Varsayılan koordinatlar 1080×1920 içindir. Seslendirme veya transkripsiyon motoru dahil değildir. Timeline ve CLI işlemleri yerelde çalışır; uzak görsel/ses URL'leri ilgili sunuculardan yüklenir. Hata bildirimlerinde yapay veri kullanın; paylaştığınız timeline'lara kişisel veri veya kimlik bilgisi koymayın.
 
 ## Proje Dizini
 
+- `src/index.ts`, `src/Root.tsx`: Studio/CLI kaydı ve örnek kompozisyonlar.
+- `src/library.ts`: bildirimleriyle birlikte `dist/` altına derlenen kütüphane girişi.
+- `src/components/`, `src/helpers/`, `src/schema.ts`: tekrar kullanılabilir render ve doğrulama.
+- `examples/`, `bin/`, `tests/`: timeline'lar, yerel CLI ve çevrimdışı testler.
+- `docs/demo.gif`: gerçek demo kesiti; `out/` git tarafından yok sayılır.
+
+## Geliştirme
+
+```bash
+npm run lint
+npm run typecheck
+npm test
+npm run test -- --coverage
+npm run build
+npm pack --dry-run
+npx remotion still src/index.ts ThermosExplainer out/still.png --frame=60
+npx remotion compositions src/index.ts
 ```
-remotion-shorts-kit/
-├── .github/workflows/ci.yml    # Çoklu platform GitHub Actions CI
-├── docs/demo-preview.svg       # Önizleme ve mimari çizimi
-├── examples/demo-timeline.json # 20 saniyelik termos anlatımı zaman çizelgesi
-├── src/
-│   ├── assets/mascot/          # Orijinal vektör SVG maskot dosyaları
-│   ├── components/             # Yeniden kullanılabilir video bileşenleri
-│   ├── compositions/           # Üst seviye Remotion kompozisyonları
-│   ├── examples/               # Örnek uygulama dosyaları
-│   ├── helpers/                # Saf fonksiyonlar ve matematik algoritmaları
-│   ├── Root.tsx                # Remotion Root kayıtları
-│   ├── schema.ts               # Zod şemaları ve TypeScript tipleri
-│   └── index.ts                # Kütüphane giriş noktası
-└── tests/                      # Vitest birim testleri
-```
+
+CLI testleri için testlerden önce kütüphane derlenir. Vitest, her yardımcı/şema dosyasında statement, branch, function ve line coverage için en az %80 ister. CI, Node 20/22/24 ile Linux ve Windows'ta çalışır; Linux render-smoke karesini artifact olarak yükler.
 
 ## Katkıda Bulunma
 
-Geliştirme süreci ve kurallar için [CONTRIBUTING.md](CONTRIBUTING.md) belgesini inceleyin.
+[CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), [SECURITY.md](SECURITY.md) ve [CHANGELOG.md](CHANGELOG.md) dosyalarını okuyun. [Hata bildirimi](.github/ISSUE_TEMPLATE/bug_report.yml) veya [özellik isteği](.github/ISSUE_TEMPLATE/feature_request.yml) formunu kullanın; [PR kontrol listesini](.github/PULL_REQUEST_TEMPLATE.md) ve [bildirim yönlendirmesini](.github/ISSUE_TEMPLATE/config.yml) izleyin. [Dependabot](.github/dependabot.yml) npm ve Actions güncellemelerini haftalık kontrol eder. Yayınlar [etiket workflow'u](.github/workflows/publish.yml) ve npm trusted publishing ile yapılır.
 
 ## Lisans
 
-Bu proje MIT Lisansı altında lisanslanmıştır. Ayrıntılar için [LICENSE](LICENSE) dosyasına bakınız.
-
-Telif Hakkı (c) 2026 Yusuf Berat Zengin.
+[MIT](LICENSE). Copyright (c) 2026 Yusuf Berat Zengin.

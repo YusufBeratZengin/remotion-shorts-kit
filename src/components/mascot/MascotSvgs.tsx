@@ -1,5 +1,5 @@
 import type React from "react";
-import type { MascotPose } from "../../schema";
+import type { MascotPose } from "../../schema.js";
 
 interface MascotSvgProps {
   className?: string;

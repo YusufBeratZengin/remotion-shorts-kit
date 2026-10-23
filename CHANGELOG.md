@@ -2,8 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+
+- ESM library entrypoint and declaration exports alongside the clonable starter; React and Remotion peer dependencies.
+- Local `shorts-kit validate` and `words-to-timeline` commands with a synthetic Whisper fixture.
+- A 15-second siphon composition and JSON timeline using original Pip poses.
+- Component rendering, CLI, invalid-timeline, and missing-asset tests; 80% helper/schema coverage thresholds.
+- Trusted npm publishing workflow, Linux render-smoke artifact, community templates, and weekly dependency updates.
+- Actual GIF demo, synchronized English/Turkish usage guides, and release instructions.
+
+### Changed
+
+- `validateTimeline` returns a nonthrowing `{ ok, errors, data? }` report. Use the new `parseTimeline` for the previous throwing, parsed-data behavior.
+- Caption batching depends on scalar layout options; line keys and word layout are memoized per active word group.
+
+### Fixed
+
+- Reject unsorted/overlapping caption words and overlapping scenes with JSON-path diagnostics.
+- Missing public assets produce a named error when Remotion's public-file manifest is available.
+- Importing the library no longer registers a Remotion root.
 
 ## [0.1.0] - 2026-10-22
 

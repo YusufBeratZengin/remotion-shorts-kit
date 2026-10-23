@@ -26,6 +26,27 @@ describe("captions helper", () => {
     expect(groupWordsIntoBatches([])).toEqual([]);
   });
 
+  it("keeps a single oversized word without emitting empty lines or batches", () => {
+    const words = [{ text: "Thermodynamics", start: 0, end: 1 }];
+    const batches = groupWordsIntoBatches(words, { maxCharsPerLine: 5, maxLines: 1 });
+    expect(batches).toHaveLength(1);
+    expect(batches[0]?.lines).toEqual([words]);
+    expect(batches[0]?.text).toBe("Thermodynamics");
+  });
+
+  it("caps sentence linger at the next batch and supports disabling linger", () => {
+    const words = [
+      { text: "Flow.", start: 0, end: 1 },
+      { text: "Stop.", start: 1.1, end: 2 },
+    ];
+    const batches = groupWordsIntoBatches(words);
+    expect(batches[0]?.end).toBe(1.1);
+    expect(findActiveCaptionBatch(batches, 1.1)?.text).toBe("Stop.");
+    const noLinger = groupWordsIntoBatches(words, { lingerDurationSec: 0 });
+    expect(noLinger[0]?.end).toBe(1);
+    expect(findActiveCaptionBatch(noLinger, 1.05)).toBeNull();
+  });
+
   it("splits batches by sentence endings and pauses", () => {
     const batches = groupWordsIntoBatches(sampleWords, {
       maxCharsPerLine: 30,

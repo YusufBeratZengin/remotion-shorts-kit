@@ -1,1 +1,1 @@
-export * from "./ExplainerShort";
+export * from "./ExplainerShort.js";

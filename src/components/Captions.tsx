@@ -6,9 +6,9 @@ import {
   type BatchingOptions,
   findActiveCaptionBatch,
   groupWordsIntoBatches,
-} from "../helpers/captions";
-import { framesToSeconds } from "../helpers/time";
-import { type CaptionStyle, DEFAULT_CAPTION_STYLE, type Word } from "../schema";
+} from "../helpers/captions.js";
+import { framesToSeconds } from "../helpers/time.js";
+import { type CaptionStyle, DEFAULT_CAPTION_STYLE, type Word } from "../schema.js";
 
 export interface CaptionsProps {
   captions: Word[];
@@ -37,17 +37,31 @@ export const Captions: React.FC<CaptionsProps> = ({
     [userStyle],
   );
 
+  const maxCharsPerLine = batchingOptions?.maxCharsPerLine ?? mergedStyle.maxCharsPerLine;
+  const maxLines = batchingOptions?.maxLines ?? mergedStyle.maxLines;
+  const pauseThresholdSec = batchingOptions?.pauseThresholdSec;
+  const lingerDurationSec = batchingOptions?.lingerDurationSec;
   const batches = useMemo(() => {
     return groupWordsIntoBatches(captions, {
-      maxCharsPerLine: mergedStyle.maxCharsPerLine,
-      maxLines: mergedStyle.maxLines,
-      ...batchingOptions,
+      maxCharsPerLine,
+      maxLines,
+      ...(pauseThresholdSec === undefined ? {} : { pauseThresholdSec }),
+      ...(lingerDurationSec === undefined ? {} : { lingerDurationSec }),
     });
-  }, [captions, mergedStyle.maxCharsPerLine, mergedStyle.maxLines, batchingOptions]);
+  }, [captions, maxCharsPerLine, maxLines, pauseThresholdSec, lingerDurationSec]);
 
   const activeBatch = useMemo(
     () => findActiveCaptionBatch(batches, currentTimeSec),
     [batches, currentTimeSec],
+  );
+  const words = activeBatch?.lines;
+  const lineLayout = useMemo(
+    () =>
+      words?.map((line, lineIndex) => ({
+        key: `line-${lineIndex}-${line[0]?.start ?? 0}`,
+        words: line.map((word, wordIndex) => ({ word, key: `${wordIndex}-${word.start}` })),
+      })) ?? [],
+    [words],
   );
 
   if (!activeBatch) {
@@ -87,11 +101,10 @@ export const Captions: React.FC<CaptionsProps> = ({
           border: "1px solid rgba(255, 255, 255, 0.12)",
         }}
       >
-        {activeBatch.lines.map((line, lineIndex) => {
-          const lineKey = `line-${lineIndex}-${line[0]?.start ?? 0}`;
+        {lineLayout.map((line) => {
           return (
             <div
-              key={lineKey}
+              key={line.key}
               style={{
                 display: "flex",
                 flexWrap: "nowrap",
@@ -100,7 +113,7 @@ export const Captions: React.FC<CaptionsProps> = ({
                 gap: "10px 14px",
               }}
             >
-              {line.map((word, wordIndex) => {
+              {line.words.map(({ word, key }) => {
                 // End is exclusive so that back-to-back words never highlight together.
                 const isActive = currentTimeSec >= word.start && currentTimeSec < word.end;
                 const isPast = currentTimeSec >= word.end;
@@ -128,7 +141,7 @@ export const Captions: React.FC<CaptionsProps> = ({
 
                 return (
                   <span
-                    key={`${wordIndex}-${word.start}`}
+                    key={key}
                     style={{
                       fontFamily: mergedStyle.fontFamily,
                       fontSize: mergedStyle.fontSize,

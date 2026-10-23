@@ -4,37 +4,79 @@
   "description": "Open-source Remotion starter kit for vertical 1080x1920 explainer shorts",
   "author": "Yusuf Berat Zengin",
   "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "homepage": "https://github.com/YusufBeratZengin/remotion-shorts-kit#readme",
+  "bugs": {
+    "url": "https://github.com/YusufBeratZengin/remotion-shorts-kit/issues"
+  },
+  "keywords": [
+    "remotion",
+    "shorts",
+    "captions",
+    "video",
+    "react",
+    "typescript",
+    "explainer",
+    "subtitles",
+    "tiktok",
+    "reels"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/YusufBeratZengin/remotion-shorts-kit.git"
+    "url": "git+https://github.com/YusufBeratZengin/remotion-shorts-kit.git"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "files": ["dist", "src"],
+  "main": "./dist/library.js",
+  "types": "./dist/library.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/library.d.ts",
+      "import": "./dist/library.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "shorts-kit": "./bin/shorts-kit.mjs"
+  },
+  "files": ["dist", "bin", "src", "examples", "README.tr.md", "CHANGELOG.md"],
   "scripts": {
     "studio": "remotion studio src/index.ts",
     "render:demo": "remotion render src/index.ts ThermosExplainer out/demo.mp4",
+    "render:example2": "remotion render src/index.ts SiphonExplainer out/siphon.mp4",
+    "prebuild": "node scripts/clean-dist.mjs",
     "build": "tsc --project tsconfig.build.json",
+    "pretest": "npm run build",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run lint && npm test && npm run build"
   },
   "dependencies": {
+    "zod": "4.5.4"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "remotion": "^4.0.537"
+  },
+  "devDependencies": {
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "remotion": "4.0.537",
-    "zod": "4.5.4"
-  },
-  "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@remotion/cli": "4.0.537",
     "@types/node": "20.17.19",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
     "typescript": "5.7.3",
-    "vitest": "3.0.7"
+    "vitest": "3.0.7",
+    "@vitest/coverage-v8": "3.0.7"
   },
   "engines": {
     "node": ">=20.0.0"

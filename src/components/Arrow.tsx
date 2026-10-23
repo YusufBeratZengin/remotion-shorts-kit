@@ -1,7 +1,7 @@
 import type React from "react";
 import { useMemo } from "react";
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import type { ArrowElement } from "../schema";
+import type { ArrowElement } from "../schema.js";
 
 export interface ArrowProps extends Partial<Omit<ArrowElement, "type">> {
   fromX: number;

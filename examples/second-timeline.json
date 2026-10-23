@@ -1,0 +1,94 @@
+{
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "scenes": [
+    {
+      "id": "question",
+      "start": 0,
+      "end": 5,
+      "background": "#0f172a",
+      "title": "How a siphon works",
+      "mascot": { "pose": "thinking", "x": 480, "y": 1200 },
+      "elements": [
+        {
+          "type": "callout",
+          "id": "question-card",
+          "x": 470,
+          "y": 600,
+          "title": "Over the rim?",
+          "text": "Can water climb out of a tank?"
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "start": 5,
+      "end": 10,
+      "background": "#082f49",
+      "title": "Start with a full tube",
+      "mascot": { "pose": "explaining", "x": 480, "y": 1200 },
+      "elements": [
+        {
+          "type": "callout",
+          "id": "flow-card",
+          "x": 470,
+          "y": 550,
+          "title": "Keep the outlet lower",
+          "text": "Gravity pulls the longer column down."
+        },
+        {
+          "type": "arrow",
+          "id": "flow-arrow",
+          "fromX": 300,
+          "fromY": 740,
+          "toX": 720,
+          "toY": 1000,
+          "curvature": -150,
+          "label": "Water flows"
+        }
+      ]
+    },
+    {
+      "id": "stop",
+      "start": 10,
+      "end": 15,
+      "background": "#042f2e",
+      "title": "An unbroken water column",
+      "mascot": { "pose": "explaining", "x": 480, "y": 1200 },
+      "elements": [
+        {
+          "type": "callout",
+          "id": "stop-card",
+          "x": 470,
+          "y": 600,
+          "title": "Air breaks the siphon",
+          "text": "Flow stops when air enters the tube."
+        }
+      ]
+    }
+  ],
+  "captions": [
+    { "text": "Can", "start": 0.2, "end": 0.6 },
+    { "text": "water", "start": 0.6, "end": 1.1 },
+    { "text": "climb", "start": 1.1, "end": 1.6 },
+    { "text": "over", "start": 1.6, "end": 2 },
+    { "text": "a", "start": 2, "end": 2.2 },
+    { "text": "rim?", "start": 2.2, "end": 3 },
+    { "text": "Fill", "start": 5.2, "end": 5.6 },
+    { "text": "the", "start": 5.6, "end": 5.9 },
+    { "text": "tube.", "start": 5.9, "end": 6.5 },
+    { "text": "Keep", "start": 6.7, "end": 7.1 },
+    { "text": "the", "start": 7.1, "end": 7.4 },
+    { "text": "outlet", "start": 7.4, "end": 8 },
+    { "text": "lower.", "start": 8, "end": 8.8 },
+    { "text": "Gravity", "start": 10.2, "end": 10.9 },
+    { "text": "drives", "start": 10.9, "end": 11.4 },
+    { "text": "the", "start": 11.4, "end": 11.7 },
+    { "text": "flow.", "start": 11.7, "end": 12.3 },
+    { "text": "Air", "start": 12.6, "end": 13 },
+    { "text": "breaks", "start": 13, "end": 13.5 },
+    { "text": "the", "start": 13.5, "end": 13.8 },
+    { "text": "siphon.", "start": 13.8, "end": 14.6 }
+  ]
+}

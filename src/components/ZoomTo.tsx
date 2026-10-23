@@ -1,6 +1,6 @@
 import type React from "react";
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import type { ZoomElement } from "../schema";
+import type { ZoomElement } from "../schema.js";
 
 export interface ZoomToProps extends Partial<Omit<ZoomElement, "type">> {
   targetX: number;

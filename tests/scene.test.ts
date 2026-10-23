@@ -61,6 +61,7 @@ describe("scene helpers", () => {
     expect(getSceneProgress(scene, 2)).toBe(0.5);
     expect(getSceneProgress(scene, 4)).toBe(1);
     expect(getSceneProgress(scene, 10)).toBe(1); // clamped
+    expect(getSceneProgress({ ...scene, end: scene.start }, 0)).toBe(1);
   });
 
   it("calculates scene duration in frames", () => {

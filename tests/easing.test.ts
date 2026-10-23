@@ -21,6 +21,15 @@ describe("easing helpers", () => {
     const val = easingPresets.easeOutBack(0.7);
     expect(val).toBeGreaterThan(0.9);
   });
+  it("evaluates the interior of every easing curve", () => {
+    for (const preset of Object.values(easingPresets)) {
+      for (const time of [0.1, 0.3, 0.6, 0.8, 0.95]) {
+        expect(Number.isFinite(preset(time))).toBe(true);
+      }
+    }
+    expect(easingPresets.easeInOutCubic(0.25)).toBeCloseTo(0.0625);
+    expect(easingPresets.easeInOutCubic(0.75)).toBeCloseTo(0.9375);
+  });
 
   it("interpolates value cleanly", () => {
     expect(interpolateValue(5, [0, 10], [0, 100])).toBe(50);

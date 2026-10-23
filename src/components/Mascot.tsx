@@ -1,7 +1,7 @@
 import type React from "react";
 import { interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
-import type { MascotPose } from "../schema";
-import { POSE_COMPONENTS } from "./mascot/MascotSvgs";
+import type { MascotPose } from "../schema.js";
+import { POSE_COMPONENTS } from "./mascot/MascotSvgs.js";
 
 export interface MascotProps {
   pose: MascotPose;

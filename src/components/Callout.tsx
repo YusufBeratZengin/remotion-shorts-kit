@@ -1,6 +1,6 @@
 import type React from "react";
 import { spring, useCurrentFrame, useVideoConfig } from "remotion";
-import type { CalloutElement } from "../schema";
+import type { CalloutElement } from "../schema.js";
 
 export interface CalloutProps extends Partial<Omit<CalloutElement, "type">> {
   text: string;
