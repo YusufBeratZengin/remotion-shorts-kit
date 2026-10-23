@@ -7,43 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-10-23
+
 ### Added
 
-- ESM library entrypoint and declaration exports alongside the clonable starter; React and Remotion peer dependencies.
+- Remotion 4 starter for 1080×1920 explainer shorts, plus an ESM React library with TypeScript declarations and React/Remotion peer dependencies.
+- Zod timeline schemas, default-filled parsers, and nonthrowing validation with JSON-path diagnostics.
+- Frame-driven word captions with pause-aware batching, memoized line layout, and conservative vertical-video safe areas.
+- Original SVG mascot Pip in five poses, callout cards, curved arrows, camera zooms, a progress bar, and a safe-area overlay.
+- JSON-driven `SceneRenderer` and `ExplainerShort`, with 20-second thermos and 15-second siphon examples.
 - Local `shorts-kit validate` and `words-to-timeline` commands with a synthetic Whisper fixture.
-- A 15-second siphon composition and JSON timeline using original Pip poses.
-- Component rendering, CLI, invalid-timeline, and missing-asset tests; 80% helper/schema coverage thresholds.
-- Trusted npm publishing workflow, Linux render-smoke artifact, community templates, and weekly dependency updates.
-- Actual GIF demo, synchronized English/Turkish usage guides, and release instructions.
-
-### Changed
-
-- `validateTimeline` returns a nonthrowing `{ ok, errors, data? }` report. Use the new `parseTimeline` for the previous throwing, parsed-data behavior.
-- Caption batching depends on scalar layout options; line keys and word layout are memoized per active word group.
+- Component rendering, CLI, invalid-timeline, and missing-asset tests; V8 coverage in `npm test` with 85% lines/statements and 80% branches/functions per helper/schema file.
+- Linux/Windows CI on Node 20/22/24, a render-smoke artifact, community templates, weekly dependency updates, and a maintainer-controlled trusted npm publishing workflow.
+- Actual GIF demo, a terminal SVG with a rerunnable CLI-output generator, synchronized English/Turkish usage guides, and release instructions.
+- JavaScript/TypeScript CodeQL scanning and CI checks for generated-demo drift.
 
 ### Fixed
 
 - Reject unsorted/overlapping caption words and overlapping scenes with JSON-path diagnostics.
 - Missing public assets produce a named error when Remotion's public-file manifest is available.
 - Importing the library no longer registers a Remotion root.
-
-## [0.1.0] - 2026-10-22
-
-### Fixed
 - Captions: no CSS transitions (frame-driven pop), end-exclusive word highlight, default `positionBottom` 500 and 180px right margin so captions stay in the safe box.
 - Audio and image paths now go through `staticFile()`; `trimBefore` replaces the deprecated `startFrom`.
 - `ZoomTo` honours `durationFrames`; composition duration, fps and size come from the timeline.
 - Safe-area overlay is hidden in final renders unless `showInRender` is set.
 - Schema rejects scenes with `end <= start` and words ending before they start.
-
-### Added
-- Core data model and Zod validation schemas (`TimelineSchema`, `SceneSchema`, `WordSchema`, `MascotConfigSchema`, `CaptionStyleSchema`).
-- Animated word-level `<Captions>` component with smart 1-2 line splitting, safe-area offset, and active word highlighting.
-- Animated SVG `<Mascot>` component featuring original character "Pip" with five poses (`idle`, `talking`, `explaining`, `thinking`, `surprised`) and squash/bounce transitions.
-- Visual attention components: `<Callout>`, `<Arrow>`, `<ZoomTo>`, `<ProgressBar>`, and `<SafeAreaOverlay>`.
-- Generic `<SceneRenderer>` and `<ExplainerShort>` compositions driven by timeline JSON.
-- Comprehensive helper functions: `secondsToFrames`, `framesToSeconds`, `groupWordsIntoBatches`, `getActiveScene`, and easing curve presets.
-- Full unit test coverage for pure helper functions and schema parsing via Vitest.
-- Complete demo composition explaining "How a Thermos Keeps Tea Hot" (`ThermosExplainer`) with 20-second timeline data.
-- Dual-language documentation in English (`README.md`) and Turkish (`README.tr.md`).
-- Multi-platform GitHub Actions CI workflow for Linux and Windows across Node.js 20 and 22.

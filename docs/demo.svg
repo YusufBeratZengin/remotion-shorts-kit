@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="871.5" height="580" viewBox="0 0 871.5 580" role="img" aria-labelledby="title description">
+  <title id="title">remotion-shorts-kit CLI demo</title>
+  <desc id="description">Actual CLI output: validate the thermos timeline, convert synthetic Whisper words, and validate the converted and siphon timelines. All validations succeed.</desc>
+  <rect x="1" y="1" width="869.5" height="578" rx="16" fill="#0d1117" stroke="#30363d"/>
+  <path d="M1 52H870.5" stroke="#30363d"/>
+  <circle cx="28" cy="27" r="6" fill="#ff5f57"/>
+  <circle cx="50" cy="27" r="6" fill="#febc2e"/>
+  <circle cx="72" cy="27" r="6" fill="#28c840"/>
+  <text x="435.75" y="32" text-anchor="middle" fill="#8b949e" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="13">shorts-kit · local CLI</text>
+  <g font-family="ui-monospace, Menlo, Consolas, monospace" font-size="14" xml:space="preserve">
+    <text x="32" y="88" fill="#a5f3fc">$ node bin/shorts-kit.mjs validate examples/demo-timeline.json</text>
+    <text x="32" y="112" fill="#d1d5db">{</text>
+    <text x="32" y="136" fill="#d1d5db">  &quot;ok&quot;: true,</text>
+    <text x="32" y="160" fill="#d1d5db">  &quot;errors&quot;: []</text>
+    <text x="32" y="184" fill="#d1d5db">}</text>
+    <text x="32" y="208" fill="#d1d5db"></text>
+    <text x="32" y="232" fill="#a5f3fc">$ node bin/shorts-kit.mjs words-to-timeline tests/fixtures/whisper.json --out out/timeline.json</text>
+    <text x="32" y="256" fill="#d1d5db">Wrote out/timeline.json</text>
+    <text x="32" y="280" fill="#d1d5db"></text>
+    <text x="32" y="304" fill="#a5f3fc">$ node bin/shorts-kit.mjs validate out/timeline.json</text>
+    <text x="32" y="328" fill="#d1d5db">{</text>
+    <text x="32" y="352" fill="#d1d5db">  &quot;ok&quot;: true,</text>
+    <text x="32" y="376" fill="#d1d5db">  &quot;errors&quot;: []</text>
+    <text x="32" y="400" fill="#d1d5db">}</text>
+    <text x="32" y="424" fill="#d1d5db"></text>
+    <text x="32" y="448" fill="#a5f3fc">$ node bin/shorts-kit.mjs validate examples/second-timeline.json</text>
+    <text x="32" y="472" fill="#d1d5db">{</text>
+    <text x="32" y="496" fill="#d1d5db">  &quot;ok&quot;: true,</text>
+    <text x="32" y="520" fill="#d1d5db">  &quot;errors&quot;: []</text>
+    <text x="32" y="544" fill="#d1d5db">}</text>
+  </g>
+</svg>

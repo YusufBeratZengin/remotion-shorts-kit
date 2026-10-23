@@ -54,6 +54,16 @@ describe("scene helpers", () => {
     expect(getActiveSceneAtFrame(sampleScenes, 360, 30)?.id).toBe("outro"); // 360 / 30 = 12s
   });
 
+  it("leaves gaps empty and clamps progress before a scene begins", () => {
+    const scene = sampleScenes[1];
+    if (!scene) throw new Error("Scene missing");
+    expect(getActiveScene([scene], 3)).toBeUndefined();
+    expect(getActiveScene([scene], 4)).toBe(scene);
+    expect(getSceneProgress(scene, 3)).toBe(0);
+    expect(getActiveSceneAtFrame([scene], 119, 30)).toBeUndefined();
+    expect(getActiveSceneAtFrame([scene], 120, 30)).toBe(scene);
+  });
+
   it("calculates scene progress properly from 0 to 1", () => {
     const scene = sampleScenes[0];
     if (!scene) throw new Error("Scene missing");

@@ -99,6 +99,32 @@ describe("captions helper", () => {
     expect(outside).toBeNull();
   });
 
+  it("breaks at an exact pause threshold without requiring punctuation", () => {
+    const words = [
+      { text: "Water", start: 0, end: 0.5 },
+      { text: "flows", start: 1, end: 1.5 },
+    ];
+    const batches = groupWordsIntoBatches(words, { pauseThresholdSec: 0.5 });
+    expect(batches.map((batch) => batch.text)).toEqual(["Water", "flows"]);
+    expect(batches[0]?.end).toBe(0.75);
+    expect(findActiveCaptionBatch(batches, 0.75)).toBeNull();
+    expect(findActiveCaptionBatch(batches, 1)?.allWords).toEqual([words[1]]);
+    expect(groupWordsIntoBatches(words, { pauseThresholdSec: 0.51 })).toHaveLength(1);
+  });
+
+  it("preserves word order and caps linger when line capacity creates a new batch", () => {
+    const words = [
+      { text: "Water", start: 0, end: 0.5 },
+      { text: "flows", start: 0.5, end: 1 },
+      { text: "down", start: 1, end: 1.5 },
+    ];
+    const batches = groupWordsIntoBatches(words, { maxCharsPerLine: 5, maxLines: 1 });
+    expect(batches.map((batch) => batch.text)).toEqual(["Water", "flows", "down"]);
+    expect(batches.flatMap((batch) => batch.allWords)).toEqual(words);
+    expect(batches.map((batch) => batch.end)).toEqual([0.5, 1, 1.75]);
+    expect(findActiveCaptionBatch(batches, 0.5)?.text).toBe("flows");
+  });
+
   it("finds the active word by timestamp", () => {
     const result = findActiveWord(sampleWords, 0.4);
     expect(result).not.toBeNull();

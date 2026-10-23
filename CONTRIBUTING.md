@@ -39,13 +39,16 @@ Read the [Contributor Covenant 2.1 Code of Conduct](CODE_OF_CONDUCT.md).
 - `npm run studio`: Launches the interactive Remotion Studio (for visual preview).
 - `npm run render:demo`: Renders the demo composition to `out/demo.mp4`.
 - `npm run render:example2`: Renders the 15-second siphon example to `out/siphon.mp4`.
-- `npm run test`: Runs unit tests via Vitest.
+- `npm run test`: Builds the library, runs tests, and prints V8 coverage via Vitest.
 - `npm run test:watch`: Runs tests in watch mode during development.
 - `npm run lint`: Validates code formatting and rules with Biome.
 - `npm run lint:fix`: Automatically applies Biome formatting and lint fixes.
 - `npm run typecheck`: Runs strict TypeScript compilation checks (`tsc --noEmit`).
 - `npm run build`: Compiles ESM JavaScript and TypeScript declarations to `dist/`.
-- `npm run test -- --coverage`: Enforces 80% statements, branches, functions, and lines per helper/schema file.
+- `npm run docs:demo`: Builds the library and refreshes `docs/demo.svg` from actual CLI output. CI checks for drift.
+
+Coverage reports track helpers and the timeline schema: at least 85% lines/statements
+and 80% branches/functions per file. HTML and JSON reports are written to `coverage/`.
 
 ## Architecture & Component Guidelines
 
@@ -113,8 +116,8 @@ To refresh the README preview from a successful local demo render, use ffmpeg:
 ffmpeg -y -ss 0 -t 7 -i out/demo.mp4 -filter_complex "[0:v]scale=540:960:flags=lanczos,split[a][b];[a]palettegen=max_colors=64[p];[b][p]paletteuse=dither=bayer:bayer_scale=3" -r 10 docs/demo.gif
 ```
 
-Verify the GIF is 540×960, 6–8 seconds, and no larger than 3 MB. Only
-`docs/demo.gif` is versioned; MP4s and still frames stay in ignored `out/`.
+Verify the GIF is 540×960, 6–8 seconds, and no larger than 3 MB. The GIF and SVG
+previews in `docs/` are versioned; MP4s and still frames stay in ignored `out/`.
 
 ## Releasing
 

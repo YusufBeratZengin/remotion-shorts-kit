@@ -1,14 +1,21 @@
 # remotion-shorts-kit
+
 [![CI](https://github.com/YusufBeratZengin/remotion-shorts-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/YusufBeratZengin/remotion-shorts-kit/actions/workflows/ci.yml) [![npm](https://img.shields.io/npm/v/remotion-shorts-kit)](https://www.npmjs.com/package/remotion-shorts-kit) [![MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE) [![Remotion 4](https://img.shields.io/badge/Remotion-4-blue)](https://www.remotion.dev/) [![Node](https://img.shields.io/badge/node-%3E%3D20-green)](package.json)
 [English](README.md) | [Türkçe](README.tr.md)
 
-A clonable starter and installable React library for 1080×1920 explainer shorts, built with Remotion 4 and strict TypeScript.
-A typed JSON-driven timeline, safe-area aware word-level captions, and original assets only keep content reusable and predictable.
-Install the library: `npm install remotion-shorts-kit react@18 react-dom@18 remotion@4`
-Try the CLI after installation: `npx shorts-kit validate node_modules/remotion-shorts-kit/examples/demo-timeline.json`
-![Rendered thermos explainer, seven-second excerpt](docs/demo.gif)
+Turn JSON timelines into 1080×1920 explainer shorts with Remotion, word-level captions, and original SVG artwork.
+
+![Terminal demo: validate timelines and convert Whisper words with the local CLI](docs/demo.svg)
+
+## Why
+
+- **Edit content as data:** one typed JSON timeline drives scenes, captions, callouts, arrows, and camera zooms.
+- **Designed for vertical video:** word highlights and conservative safe-area defaults are ready for a 1080×1920 canvas.
+- **Start locally, reuse anywhere:** clone the Studio starter or import React components; validation and Whisper conversion need no service credentials.
 
 ## Demo
+
+![Rendered thermos explainer, seven-second excerpt](docs/demo.gif)
 
 The GIF is a 540×960 excerpt of the actual 20-second `ThermosExplainer` output, under 3 MB. [Static fallback](docs/demo-preview.svg).
 
@@ -40,7 +47,14 @@ Change a timeline instead of rebuilding scene sequencing, subtitle layout, masco
 
 ## Install
 
-As a library, install the package and its React 18 / Remotion 4 peers with the command above. Zod is included as a runtime dependency. The package is ESM; CommonJS `require()` is not supported. The npm badge reflects registry availability; until the first release, use the source starter.
+The npm badge reflects registry availability; until the first release, use the source starter in [Quick Start](#quick-start). Once published, install the library and its React 18 / Remotion 4 peers:
+
+```bash
+npm install remotion-shorts-kit react@18 react-dom@18 remotion@4
+npx shorts-kit validate node_modules/remotion-shorts-kit/examples/demo-timeline.json
+```
+
+Zod is included as a runtime dependency. The package is ESM; CommonJS `require()` is not supported.
 
 ## Quick Start
 
@@ -54,7 +68,11 @@ Node.js 20 or newer and npm. Rendering also needs a supported Chromium installat
 git clone https://github.com/YusufBeratZengin/remotion-shorts-kit.git
 cd remotion-shorts-kit
 npm ci
+npm run build
+node bin/shorts-kit.mjs validate examples/demo-timeline.json
 ```
+
+Validation prints `{ "ok": true, "errors": [] }` and exits with code 0. This CLI check needs no browser or network service.
 
 ### Running the Studio
 
@@ -81,6 +99,7 @@ The installed `shorts-kit` executable accepts raw timeline JSON:
 
 ```bash
 node bin/shorts-kit.mjs validate examples/demo-timeline.json
+node bin/shorts-kit.mjs validate examples/second-timeline.json
 ```
 
 In an installed project, replace `node bin/shorts-kit.mjs` with `npx shorts-kit`. Invalid JSON, schema errors, and bad arguments exit with code 1. Validation reports paths such as `$.captions[1].start`.
@@ -92,6 +111,18 @@ In an installed project, replace `node bin/shorts-kit.mjs` with `npx shorts-kit`
 - [Thermos timeline](examples/demo-timeline.json): heat transfer, 20 seconds; `ThermosExplainer`.
 - [Siphon timeline](examples/second-timeline.json): a full tube, lower outlet, and air breaking the flow, 15 seconds; `SiphonExplainer`, two mascot poses.
 - [Whisper fixture](tests/fixtures/whisper.json): synthetic word timestamps for CLI practice.
+
+## Configuration
+
+The timeline JSON is the configuration: use `fps`, `width`, and `height` for the canvas, `captionStyle` for subtitles, and `audio` for narration. `remotion.config.ts` holds starter render settings. No environment variables or API keys are required.
+
+To regenerate the terminal image from real CLI output after changing the examples or CLI:
+
+```bash
+npm run docs:demo
+```
+
+This builds the library, runs the documented validation/conversion commands, writes `out/timeline.json`, and refreshes `docs/demo.svg`. CI checks that the image stays in sync.
 
 ## Timeline JSON Reference
 
@@ -194,7 +225,15 @@ Zod fills defaults and checks timeline intervals. Frame time selects a scene and
 
 Pip and the supplied SVG illustrations are original project assets under [MIT](LICENSE). No copyrighted characters, bundled audio, or font files are included; typography uses system fonts. Third-party dependencies keep their own licenses. Review [Remotion's licensing terms](https://www.remotion.dev/license) for your use case.
 
-## Limitations and Privacy
+## FAQ and Limitations
+
+**Do I need a paid service?** The kit performs validation and word conversion locally. It includes no TTS or transcription service. Remotion has its own [license terms](https://www.remotion.dev/license).
+
+**Can I use it before the npm release?** Yes: clone this repository and follow Quick Start. The npm badge may show that the package is unavailable until publication.
+
+**Why does the CLI need a build?** It imports the generated `dist/` schema. Run `npm run build` after cloning or changing the schema; an installed package includes the build.
+
+**Are the example videos narrated?** No. Supply your own audio and word timestamps using the workflow above.
 
 Default coordinates target 1080×1920. No narration or transcription engine is bundled. Timelines and CLI processing stay local; remote asset URLs load from their respective hosts. Use synthetic data in bug reports and keep personal data and credentials out of timelines you share.
 
@@ -204,7 +243,7 @@ Default coordinates target 1080×1920. No narration or transcription engine is b
 - `src/library.ts`: library entry, emitted to `dist/` with declarations.
 - `src/components/`, `src/helpers/`, `src/schema.ts`: reusable rendering and validation.
 - `examples/`, `bin/`, `tests/`: timelines, local CLI, and offline tests.
-- `docs/demo.gif`: actual demo excerpt; `out/` is ignored.
+- `docs/demo.svg`, `scripts/make-demo.mjs`: reproducible terminal demo; `docs/demo.gif`: actual video excerpt. `out/` is ignored.
 
 ## Development
 
@@ -212,14 +251,14 @@ Default coordinates target 1080×1920. No narration or transcription engine is b
 npm run lint
 npm run typecheck
 npm test
-npm run test -- --coverage
+npm run docs:demo
 npm run build
 npm pack --dry-run
 npx remotion still src/index.ts ThermosExplainer out/still.png --frame=60
 npx remotion compositions src/index.ts
 ```
 
-Tests build the library first for CLI coverage. Vitest enforces at least 80% statements, branches, functions, and lines per helper/schema file. CI runs Node 20/22/24 on Linux and Windows and uploads a Linux render-smoke still.
+`npm test` builds the library, runs the tests, and prints V8 coverage. Coverage tracks helpers and the timeline schema, with at least 85% lines/statements and 80% branches/functions per file; HTML and JSON reports go to `coverage/`. Component rendering and CLI behavior have separate tests. CI runs Node 20/22/24 on Linux and Windows, checks the generated terminal demo, and uploads a Linux render-smoke still. CodeQL analyzes JavaScript/TypeScript on pushes, pull requests, and a weekly schedule.
 
 ## Contributing
 

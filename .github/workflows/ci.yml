@@ -41,8 +41,13 @@ jobs:
       - name: Run typecheck
         run: npm run typecheck
 
-      - name: Run unit tests
-        run: npm run test -- --coverage
+      - name: Run unit tests and print coverage
+        run: npm test
+
+      - name: Verify reproducible CLI demo
+        run: |
+          npm run docs:demo
+          git diff --exit-code -- docs/demo.svg
 
       - name: Build library and declarations
         run: npm run build
