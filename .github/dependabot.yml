@@ -1,19 +1,26 @@
 version: 2
 updates:
-  - package-ecosystem: npm
-    directory: /
-    schedule:
-      interval: weekly
-    groups:
-      remotion:
-        patterns:
-          - remotion
-          - "@remotion/*"
-      vitest:
-        patterns:
-          - vitest
-          - "@vitest/*"
-  - package-ecosystem: github-actions
-    directory: /
-    schedule:
-      interval: weekly
+- package-ecosystem: npm
+  directory: /
+  schedule:
+    interval: monthly
+  groups:
+    remotion:
+      patterns:
+      - remotion
+      - '@remotion/*'
+    vitest:
+      patterns:
+      - vitest
+      - '@vitest/*'
+    diger:
+      patterns:
+      - '*'
+- package-ecosystem: github-actions
+  directory: /
+  schedule:
+    interval: monthly
+  groups:
+    hepsi:
+      patterns:
+      - '*'
