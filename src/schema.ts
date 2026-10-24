@@ -1,4 +1,6 @@
 import { z } from "zod";
+import { SceneTemplateSchema } from "./templates.js";
+import { ThemeSchema } from "./themes.js";
 
 /**
  * Supported mascot poses.
@@ -107,6 +109,7 @@ export const SceneSchema = z
     end: z.number().min(0).describe("Scene end time in seconds"),
     background: z.string().describe("Hex color, CSS gradient, or image URL"),
     title: z.string().optional(),
+    template: SceneTemplateSchema.optional(),
     mascot: MascotConfigSchema.optional(),
     elements: z.array(SceneElementSchema).default([]),
   })
@@ -183,6 +186,7 @@ export const TimelineSchema = z
     captionStyle: CaptionStyleSchema.default(DEFAULT_CAPTION_STYLE),
     showSafeArea: z.boolean().default(false),
     showProgressBar: z.boolean().default(true),
+    theme: ThemeSchema.optional(),
   })
   .superRefine((timeline, ctx) => {
     for (let index = 1; index < timeline.captions.length; index++) {

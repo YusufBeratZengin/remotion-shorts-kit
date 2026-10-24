@@ -13,6 +13,64 @@ Turn JSON timelines into 1080×1920 explainer shorts with Remotion, word-level c
 - **Designed for vertical video:** word highlights and conservative safe-area defaults are ready for a 1080×1920 canvas.
 - **Start locally, reuse anywhere:** clone the Studio starter or import React components; validation and Whisper conversion need no service credentials.
 
+## Scene gallery
+
+These are schematic SVG previews, using the same example content and theme palettes as Studio. Browser rendering could not be completed in this environment; the images are **not rendered video frames**.
+
+| Template | Midnight | Paper | Sunset |
+| --- | --- | --- | --- |
+| List / counter | <img src="docs/list-midnight.svg" width="180" alt="List in Midnight" /> | <img src="docs/list-paper.svg" width="180" alt="List in Paper" /> | <img src="docs/list-sunset.svg" width="180" alt="List in Sunset" /> |
+| Before / after | <img src="docs/before-after-midnight.svg" width="180" alt="Comparison in Midnight" /> | <img src="docs/before-after-paper.svg" width="180" alt="Comparison in Paper" /> | <img src="docs/before-after-sunset.svg" width="180" alt="Comparison in Sunset" /> |
+
+Regenerate the SVGs locally with `npm run docs:gallery`. In Studio, open `Templates-midnight`, `Templates-paper`, or `Templates-sunset`. With a working Chromium installation, capture actual 540×960 stills:
+
+```bash
+npx remotion still src/index.ts Templates-midnight docs/list-midnight.png --frame=90 --scale=0.5
+npx remotion still src/index.ts Templates-midnight docs/before-after-midnight.png --frame=240 --scale=0.5
+```
+
+Replace `midnight` with `paper` or `sunset` for the other palettes. The JSON source is [examples/templates-timeline.json](examples/templates-timeline.json).
+
+## Templates and themes
+
+Add an optional `template` to any scene; existing titles, mascots, callouts, arrows, and zooms still work. Animations restart at the scene's start. Sizes target the existing 1080×1920 canvas.
+
+```tsx
+import { ExplainerShort, THEMES, createThemedTimeline } from "remotion-shorts-kit";
+
+const timeline = createThemedTimeline({
+  scenes: [
+    {
+      id: "steps", start: 0, end: 5,
+      template: {
+        type: "list", heading: "Three useful steps",
+        items: ["Choose an idea", "Show the detail", "Make it useful"],
+        intervalSeconds: 0.6,
+      },
+    },
+    {
+      id: "compare", start: 5, end: 10,
+      template: {
+        type: "before-after", heading: "A clearer message",
+        before: { label: "BEFORE", text: "Too many competing ideas." },
+        after: { label: "AFTER", text: "One clear next step." },
+        revealSeconds: 1,
+      },
+    },
+  ],
+}, THEMES.paper);
+
+export const MyTemplates = () => <ExplainerShort timeline={timeline} />;
+```
+
+- `list`: 1–5 nonempty items (up to 90 characters each), a heading (up to 80 characters), and a positive `intervalSeconds` (default `0.6`). The first item appears immediately; the revealed-item counter stops at the total.
+- `before-after`: a heading (up to 80 characters), two `{ label, text }` panels (up to 30/180 characters), and a nonnegative `revealSeconds` (default `1`), followed by a 0.4-second fade. Timing is rounded to frames. Keep delays within the scene duration to show all content.
+- `THEMES.midnight`, `THEMES.paper`, and `THEMES.sunset` each contain `fontFamily` and `colors: { background, surface, text, muted, accent, highlight }`. All fonts use local fallback stacks; no font downloads are needed. Customize with `{ ...THEMES.paper, fontFamily: "Arial, sans-serif", colors: { ...THEMES.paper.colors, accent: "#9333ea" } }`.
+
+Call `createThemedTimeline(input, theme)` **before** the regular parser fills defaults. It supplies missing scene backgrounds, caption colors/fonts, callout colors, and arrow colors; explicit styles win. Its output stores the optional `theme` object for template/title typography and the progress bar. Passing already parsed data preserves its filled styles. A `theme` on raw JSON controls templates and shared chrome; use the helper to also fill caption/annotation defaults.
+
+Existing timelines need no changes: `parseTimeline` / `TimelineSchema.parse` keep their original defaults and required background field. Only `createThemedTimeline` permits omitting backgrounds. `ThemeSchema`, `SceneTemplateSchema`, `ListTemplateSchema`, `BeforeAfterTemplateSchema`, their inferred types, and the standalone `SceneTemplateRenderer` are exported.
+
 ## Demo
 
 ![Rendered thermos explainer, seven-second excerpt](docs/demo.gif)
@@ -137,12 +195,13 @@ The full schema is in [src/schema.ts](src/schema.ts). Scene order is preserved; 
 | `captions` | `[]` | Words: `{ text, start, end, confidence? }`, times in seconds |
 | `audio` | absent | `{ src, volume: 1, startOffset: 0 }`, offset in seconds |
 | `captionStyle` | schema defaults | Font, highlight, line layout, and caption position |
+| `theme` | omitted | Optional shared theme object; see Templates and themes |
 | `showSafeArea` | `false` | Studio/Player guide; hidden in final renders by default |
 | `showProgressBar` | `true` | Playback progress |
 
 ### Scene Definition
 
-Each scene has `id`, `start`, `end` (seconds), and a CSS `background`; optional `title`, `mascot`, and `elements`. `mascot` accepts `{ pose, x, y, scale: 1, flip: false }`. `x`/`y` are canvas coordinates.
+Each scene has `id`, `start`, `end` (seconds), and a CSS `background`; optional `title`, `template`, `mascot`, and `elements`. `mascot` accepts `{ pose, x, y, scale: 1, flip: false }`. `x`/`y` are canvas coordinates.
 
 ### Scene Elements
 

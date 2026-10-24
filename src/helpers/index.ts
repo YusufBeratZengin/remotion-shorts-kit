@@ -4,3 +4,4 @@ export * from "./scene.js";
 export * from "./easing.js";
 export * from "./assets.js";
 export * from "./resolveAsset.js";
+export * from "./theme.js";

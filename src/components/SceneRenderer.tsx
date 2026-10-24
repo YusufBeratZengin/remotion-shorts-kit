@@ -3,18 +3,21 @@ import { useCurrentFrame, useVideoConfig } from "remotion";
 import { resolveAsset } from "../helpers/resolveAsset.js";
 import { framesToSeconds, secondsToFrames } from "../helpers/time.js";
 import type { Scene } from "../schema.js";
+import type { Theme } from "../themes.js";
 import { Arrow } from "./Arrow.js";
 import { Callout } from "./Callout.js";
 import { Mascot } from "./Mascot.js";
+import { SceneTemplateRenderer } from "./SceneTemplate.js";
 import { ZoomTo } from "./ZoomTo.js";
 
 export interface SceneRendererProps {
   scene: Scene;
+  theme?: Theme;
   className?: string;
   style?: React.CSSProperties;
 }
 
-export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, className, style }) => {
+export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, theme, className, style }) => {
   const currentFrame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const currentTimeSec = framesToSeconds(currentFrame, fps);
@@ -57,6 +60,7 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, className, 
         width: "100%",
         height: "100%",
         overflow: "hidden",
+        fontFamily: theme?.fontFamily,
         ...bgStyle,
         ...style,
       }}
@@ -69,11 +73,11 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, className, 
             top: 140,
             left: "50%",
             transform: "translateX(-50%)",
-            backgroundColor: "rgba(15, 23, 42, 0.75)",
+            backgroundColor: theme?.colors.surface ?? "rgba(15, 23, 42, 0.75)",
             border: "1px solid rgba(255, 255, 255, 0.15)",
             padding: "10px 24px",
             borderRadius: 30,
-            color: "#94a3b8",
+            color: theme?.colors.muted ?? "#94a3b8",
             fontSize: 22,
             fontWeight: 700,
             letterSpacing: "0.08em",
@@ -84,6 +88,15 @@ export const SceneRenderer: React.FC<SceneRendererProps> = ({ scene, className, 
         >
           {scene.title}
         </div>
+      )}
+
+      {scene.template && (
+        <SceneTemplateRenderer
+          template={scene.template}
+          frame={localSceneFrame}
+          fps={fps}
+          theme={theme}
+        />
       )}
 
       {/* Mascot Layer */}

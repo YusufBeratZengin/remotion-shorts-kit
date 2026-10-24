@@ -1,0 +1,34 @@
+{
+  "scenes": [
+    {
+      "id": "checklist",
+      "start": 0,
+      "end": 5,
+      "background": "#0b1220",
+      "title": "A repeatable workflow",
+      "template": {
+        "type": "list",
+        "heading": "Make every short count.",
+        "items": ["Start with one clear idea", "Show the useful detail", "End with a next step"],
+        "intervalSeconds": 0.6
+      }
+    },
+    {
+      "id": "comparison",
+      "start": 5,
+      "end": 10,
+      "background": "#0b1220",
+      "title": "One change. Clearer results.",
+      "template": {
+        "type": "before-after",
+        "heading": "Give your idea room to land.",
+        "before": {
+          "label": "BEFORE",
+          "text": "A wall of text. Three ideas competing for attention."
+        },
+        "after": { "label": "AFTER", "text": "One idea. Three steps. A clear next move." },
+        "revealSeconds": 1
+      }
+    }
+  ]
+}

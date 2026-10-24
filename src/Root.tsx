@@ -2,9 +2,11 @@ import type React from "react";
 import { type CalculateMetadataFunction, Composition } from "remotion";
 import { ExplainerShort, type ExplainerShortProps } from "./compositions/ExplainerShort.js";
 import { SiphonExplainer, siphonTimeline } from "./examples/SiphonExplainer.js";
+import { createTemplateShowcase } from "./examples/TemplateShowcase.js";
 import { ThermosExplainer, demoTimeline } from "./examples/ThermosExplainer.js";
 import { timelineDurationInFrames } from "./helpers/scene.js";
 import { ExplainerPropsSchema, type Timeline } from "./schema.js";
+import { THEMES } from "./themes.js";
 
 /**
  * Derives fps, size and duration from the timeline itself, so editing the JSON
@@ -28,6 +30,23 @@ const safeAreaDemoTimeline: Timeline = {
 export const RemotionRoot: React.FC = () => {
   return (
     <>
+      {Object.entries(THEMES).map(([name, theme]) => {
+        const timeline = createTemplateShowcase(theme);
+        return (
+          <Composition
+            key={name}
+            id={`Templates-${name}`}
+            component={ExplainerShort}
+            schema={ExplainerPropsSchema}
+            calculateMetadata={calculateTimelineMetadata}
+            durationInFrames={timelineDurationInFrames(timeline)}
+            fps={timeline.fps}
+            width={timeline.width}
+            height={timeline.height}
+            defaultProps={{ timeline }}
+          />
+        );
+      })}
       {/* Primary Demo Composition: How a Thermos Works (20 seconds) */}
       <Composition
         id="ThermosExplainer"

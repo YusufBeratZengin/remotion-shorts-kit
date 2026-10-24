@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="960" viewBox="0 0 540 960" role="img" aria-labelledby="title description">
+  <title id="title">List / counter — midnight</title>
+  <desc id="description">Schematic SVG preview using the Studio example's content and theme. Not a rendered video frame.</desc>
+  <g font-family="&apos;Segoe UI&apos;, Arial, sans-serif">
+    <rect width="540" height="960" fill="#0b1220"/>
+    <rect x="58" y="66" width="360" height="30" rx="15" fill="#17243b"/>
+    <text x="72" y="86" fill="#a5b4cc" font-size="11" font-weight="600"><tspan x="72" dy="0">A REPEATABLE WORKFLOW</tspan></text>
+    <text x="32" y="168" fill="#38bdf8" font-size="10" font-weight="600"><tspan x="32" dy="0">CHECKLIST</tspan></text>
+    <text x="32" y="204" fill="#f8fafc" font-size="27" font-weight="800"><tspan x="32" dy="0">Make every short count.</tspan></text>
+    <text x="32" y="292" fill="#facc15" font-size="34" font-weight="800"><tspan x="32" dy="0">3 / 3</tspan></text>
+    <rect x="32" y="320" width="416" height="72" rx="12" fill="#17243b"/>
+    <text x="48" y="354" fill="#38bdf8" font-size="15" font-weight="600"><tspan x="48" dy="0">1.</tspan></text>
+    <text x="76" y="354" fill="#f8fafc" font-size="15" font-weight="600"><tspan x="76" dy="0">Start with one clear idea</tspan></text>
+    <rect x="32" y="403" width="416" height="72" rx="12" fill="#17243b"/>
+    <text x="48" y="437" fill="#38bdf8" font-size="15" font-weight="600"><tspan x="48" dy="0">2.</tspan></text>
+    <text x="76" y="437" fill="#f8fafc" font-size="15" font-weight="600"><tspan x="76" dy="0">Show the useful detail</tspan></text>
+    <rect x="32" y="486" width="416" height="72" rx="12" fill="#17243b"/>
+    <text x="48" y="520" fill="#38bdf8" font-size="15" font-weight="600"><tspan x="48" dy="0">3.</tspan></text>
+    <text x="76" y="520" fill="#f8fafc" font-size="15" font-weight="600"><tspan x="76" dy="0">End with a next step</tspan></text>
+    <text x="32" y="885" fill="#a5b4cc" font-size="10" font-weight="600"><tspan x="32" dy="0">SVG PREVIEW</tspan></text>
+    <text x="32" y="908" fill="#38bdf8" font-size="12" font-weight="600"><tspan x="32" dy="0">midnight / list + counter</tspan></text>
+  </g>
+</svg>

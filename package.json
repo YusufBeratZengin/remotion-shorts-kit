@@ -54,6 +54,8 @@
     "test:watch": "vitest",
     "predocs:demo": "npm run build",
     "docs:demo": "node scripts/make-demo.mjs",
+    "predocs:gallery": "npm run build",
+    "docs:gallery": "node scripts/make-gallery.mjs",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
     "typecheck": "tsc --noEmit",

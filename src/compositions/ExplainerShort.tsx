@@ -33,18 +33,18 @@ export const ExplainerShort: React.FC<ExplainerShortProps> = ({ timeline: rawTim
         height,
         backgroundColor: "#000000",
         overflow: "hidden",
-        fontFamily: DEFAULT_CAPTION_STYLE.fontFamily,
+        fontFamily: timeline.theme?.fontFamily ?? DEFAULT_CAPTION_STYLE.fontFamily,
       }}
     >
       {/* Active Scene Rendering */}
       {activeScene ? (
-        <SceneRenderer scene={activeScene} />
+        <SceneRenderer scene={activeScene} theme={timeline.theme} />
       ) : (
         <div
           style={{
             width: "100%",
             height: "100%",
-            backgroundColor: "#020617",
+            backgroundColor: timeline.theme?.colors.background ?? "#020617",
           }}
         />
       )}
@@ -55,7 +55,7 @@ export const ExplainerShort: React.FC<ExplainerShortProps> = ({ timeline: rawTim
       )}
 
       {/* Optional Progress Bar */}
-      {timeline.showProgressBar && <ProgressBar />}
+      {timeline.showProgressBar && <ProgressBar color={timeline.theme?.colors.accent} />}
 
       {/* Safe Area Guides (only rendered if showSafeArea is true) */}
       <SafeAreaOverlay visible={timeline.showSafeArea} />

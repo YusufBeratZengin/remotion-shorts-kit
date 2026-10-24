@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Optional scene templates: a staggered list with a revealed-item counter, and a before/after comparison with a timed reveal. Both use scene-local frames and retain existing annotation layers.
+- A single typed, validated theme object for colors and local font stacks; `midnight`, `paper`, and `sunset` presets, plus `createThemedTimeline` to fill missing styles while preserving explicit overrides.
+- Three `Templates-*` Studio compositions, a reusable JSON example, and six clearly labeled SVG gallery previews under `docs/`, reproducible with `npm run docs:gallery`.
+- English/Turkish template, theme, gallery, and still-render instructions; tests for validation, themes, overrides, and exact animation/scene boundaries.
+
+### Compatibility
+
+- Existing exports, required scene fields, and unthemed timeline defaults are unchanged. `template` and `theme` are optional; apply theme defaults to input data before calling the regular parser.
+
 ## [0.1.0] - 2026-10-23
 
 ### Added

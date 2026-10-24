@@ -5,5 +5,6 @@ export * from "./Mascot.js";
 export * from "./ProgressBar.js";
 export * from "./SafeAreaOverlay.js";
 export * from "./SceneRenderer.js";
+export * from "./SceneTemplate.js";
 export * from "./ZoomTo.js";
 export * from "./mascot/MascotSvgs.js";

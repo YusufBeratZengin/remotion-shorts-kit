@@ -13,6 +13,64 @@ JSON zaman çizelgelerini Remotion, kelime bazlı altyazılar ve özgün SVG çi
 - **Dikey video için hazır başlayın:** kelime vurgusu ve temkinli güvenli alan ölçüleri 1080×1920 tuval için ayarlıdır.
 - **Yerelde başlayın, bileşenleri yeniden kullanın:** Studio başlangıç kitini klonlayın veya React bileşenlerini projenize alın; doğrulama ve Whisper dönüşümü servis anahtarı gerektirmez.
 
+## Sahne galerisi
+
+Bunlar Studio ile aynı örnek içeriği ve tema paletlerini kullanan şematik SVG önizlemelerdir. Bu ortamda tarayıcı renderı tamamlanamadığı için görseller **gerçek video karesi değildir**.
+
+| Şablon | Midnight | Paper | Sunset |
+| --- | --- | --- | --- |
+| Liste / sayaç | <img src="docs/list-midnight.svg" width="180" alt="Midnight temalı liste" /> | <img src="docs/list-paper.svg" width="180" alt="Paper temalı liste" /> | <img src="docs/list-sunset.svg" width="180" alt="Sunset temalı liste" /> |
+| Önce / sonra | <img src="docs/before-after-midnight.svg" width="180" alt="Midnight temalı karşılaştırma" /> | <img src="docs/before-after-paper.svg" width="180" alt="Paper temalı karşılaştırma" /> | <img src="docs/before-after-sunset.svg" width="180" alt="Sunset temalı karşılaştırma" /> |
+
+SVG'leri `npm run docs:gallery` ile yerelde yeniden üretin. Studio'da `Templates-midnight`, `Templates-paper` veya `Templates-sunset` kompozisyonunu açın. Çalışan bir Chromium kurulumu ile gerçek 540×960 kareler alın:
+
+```bash
+npx remotion still src/index.ts Templates-midnight docs/list-midnight.png --frame=90 --scale=0.5
+npx remotion still src/index.ts Templates-midnight docs/before-after-midnight.png --frame=240 --scale=0.5
+```
+
+Diğer paletler için `midnight` yerine `paper` veya `sunset` yazın. JSON kaynağı: [examples/templates-timeline.json](examples/templates-timeline.json).
+
+## Şablonlar ve temalar
+
+Sahneye isteğe bağlı `template` ekleyin; mevcut başlık, maskot, bilgi kartı, ok ve yakınlaştırmalar çalışmaya devam eder. Animasyonlar sahne başlangıcında sıfırlanır. Ölçüler mevcut 1080×1920 tuvale göredir.
+
+```tsx
+import { ExplainerShort, THEMES, createThemedTimeline } from "remotion-shorts-kit";
+
+const timeline = createThemedTimeline({
+  scenes: [
+    {
+      id: "steps", start: 0, end: 5,
+      template: {
+        type: "list", heading: "Üç yararlı adım",
+        items: ["Bir fikir seç", "Ayrıntıyı göster", "Faydayı anlat"],
+        intervalSeconds: 0.6,
+      },
+    },
+    {
+      id: "compare", start: 5, end: 10,
+      template: {
+        type: "before-after", heading: "Daha açık bir mesaj",
+        before: { label: "ÖNCE", text: "Birbiriyle yarışan çok fazla fikir." },
+        after: { label: "SONRA", text: "Tek ve net bir sonraki adım." },
+        revealSeconds: 1,
+      },
+    },
+  ],
+}, THEMES.paper);
+
+export const MyTemplates = () => <ExplainerShort timeline={timeline} />;
+```
+
+- `list`: 1–5 boş olmayan öğe (her biri en çok 90 karakter), başlık (en çok 80 karakter) ve pozitif `intervalSeconds` (varsayılan `0.6`). İlk öğe hemen görünür; görünür öğe sayacı toplamda durur.
+- `before-after`: başlık (en çok 80 karakter), iki `{ label, text }` paneli (en çok 30/180 karakter) ve negatif olmayan `revealSeconds` (varsayılan `1`); ardından 0,4 saniyelik görünürlük geçişi. Süreler kareye yuvarlanır. Tüm içeriği göstermek için gecikmeleri sahne süresinin içinde tutun.
+- `THEMES.midnight`, `THEMES.paper` ve `THEMES.sunset` tek nesnede `fontFamily` ve `colors: { background, surface, text, muted, accent, highlight }` içerir. Yazı tipleri yerel alternatifleri kullanır; indirme gerekmez. Özelleştirme: `{ ...THEMES.paper, fontFamily: "Arial, sans-serif", colors: { ...THEMES.paper.colors, accent: "#9333ea" } }`.
+
+`createThemedTimeline(input, theme)` fonksiyonunu normal ayrıştırıcı varsayılanları doldurmadan **önce** çağırın. Eksik sahne arka planlarını, altyazı renklerini/yazı tipini, kart ve ok renklerini doldurur; açıkça verilen stiller önceliklidir. Çıktıda tutulan isteğe bağlı `theme`, şablon/başlık yazı tipini ve ilerleme çubuğunu yönetir. Önceden ayrıştırılmış verinin doldurulmuş stilleri korunur. Ham JSON'daki `theme`, şablonları ve ortak görünümü yönetir; altyazı/kart/ok varsayılanları için yardımcı fonksiyonu kullanın.
+
+Mevcut timeline'lar değişiklik gerektirmez: `parseTimeline` / `TimelineSchema.parse` eski varsayılanları ve zorunlu arka plan alanını korur. Arka planı yalnız `createThemedTimeline` kullanırken atlayabilirsiniz. `ThemeSchema`, `SceneTemplateSchema`, `ListTemplateSchema`, `BeforeAfterTemplateSchema`, türetilmiş tipleri ve bağımsız `SceneTemplateRenderer` dışa aktarılır.
+
 ## Demo
 
 ![Render alınmış termos anlatımından yedi saniyelik kesit](docs/demo.gif)
@@ -137,12 +195,13 @@ Tam şema [src/schema.ts](src/schema.ts) dosyasındadır. Sahne sırası korunur
 | `captions` | `[]` | Kelimeler: `{ text, start, end, confidence? }`; süreler saniye |
 | `audio` | yok | `{ src, volume: 1, startOffset: 0 }`; başlangıç ofseti saniye |
 | `captionStyle` | şema varsayılanları | Yazı tipi, vurgu, satır düzeni ve altyazı konumu |
+| `theme` | yok | İsteğe bağlı ortak tema nesnesi; Şablonlar ve temalar bölümüne bakın |
 | `showSafeArea` | `false` | Studio/Player kılavuzu; son çıktıda varsayılan olarak gizli |
 | `showProgressBar` | `true` | Oynatma ilerlemesi |
 
 ### Sahne Tanımı Örneği
 
-Her sahnede `id`, `start`, `end` (saniye) ve CSS `background` bulunur. `title`, `mascot` ve `elements` isteğe bağlıdır. `mascot`, `{ pose, x, y, scale: 1, flip: false }` alır. `x`/`y` tuval koordinatlarıdır.
+Her sahnede `id`, `start`, `end` (saniye) ve CSS `background` bulunur. `title`, `template`, `mascot` ve `elements` isteğe bağlıdır. `mascot`, `{ pose, x, y, scale: 1, flip: false }` alır. `x`/`y` tuval koordinatlarıdır.
 
 ### Sahne Elemanları
 

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="960" viewBox="0 0 540 960" role="img" aria-labelledby="title description">
+  <title id="title">Before / after — paper</title>
+  <desc id="description">Schematic SVG preview using the Studio example's content and theme. Not a rendered video frame.</desc>
+  <g font-family="Georgia, &apos;Times New Roman&apos;, serif">
+    <rect width="540" height="960" fill="#f5f0e8"/>
+    <rect x="58" y="66" width="360" height="30" rx="15" fill="#ffffff"/>
+    <text x="72" y="86" fill="#66665d" font-size="11" font-weight="600"><tspan x="72" dy="0">ONE CHANGE. CLEARER RESULTS.</tspan></text>
+    <text x="32" y="168" fill="#28675b" font-size="10" font-weight="600"><tspan x="32" dy="0">BEFORE / AFTER</tspan></text>
+    <text x="32" y="204" fill="#252522" font-size="27" font-weight="800"><tspan x="32" dy="0">Give your idea room to</tspan><tspan x="32" dy="35.1">land.</tspan></text>
+    <rect x="32" y="290" width="416" height="140" rx="12" fill="#ffffff"/>
+    <path d="M34 302V418" stroke="#66665d" stroke-width="3"/>
+    <text x="48" y="320" fill="#66665d" font-size="11" font-weight="600"><tspan x="48" dy="0">BEFORE</tspan></text>
+    <text x="48" y="351" fill="#252522" font-size="17" font-weight="600"><tspan x="48" dy="0">A wall of text. Three ideas competing</tspan><tspan x="48" dy="22.1">for attention.</tspan></text>
+    <rect x="32" y="448" width="416" height="140" rx="12" fill="#ffffff"/>
+    <path d="M34 460V576" stroke="#28675b" stroke-width="3"/>
+    <text x="48" y="478" fill="#28675b" font-size="11" font-weight="600"><tspan x="48" dy="0">AFTER</tspan></text>
+    <text x="48" y="509" fill="#252522" font-size="17" font-weight="600"><tspan x="48" dy="0">One idea. Three steps. A clear next</tspan><tspan x="48" dy="22.1">move.</tspan></text>
+    <text x="32" y="885" fill="#66665d" font-size="10" font-weight="600"><tspan x="32" dy="0">SVG PREVIEW</tspan></text>
+    <text x="32" y="908" fill="#28675b" font-size="12" font-weight="600"><tspan x="32" dy="0">paper / before + after</tspan></text>
+  </g>
+</svg>
