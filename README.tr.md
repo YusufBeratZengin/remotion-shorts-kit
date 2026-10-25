@@ -321,7 +321,7 @@ npx remotion compositions src/index.ts
 
 ## Katkıda Bulunma
 
-[CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), [SECURITY.md](SECURITY.md) ve [CHANGELOG.md](CHANGELOG.md) dosyalarını okuyun. [Hata bildirimi](.github/ISSUE_TEMPLATE/bug_report.yml) veya [özellik isteği](.github/ISSUE_TEMPLATE/feature_request.yml) formunu kullanın; [PR kontrol listesini](.github/PULL_REQUEST_TEMPLATE.md) ve [bildirim yönlendirmesini](.github/ISSUE_TEMPLATE/config.yml) izleyin. [Dependabot](.github/dependabot.yml) npm ve Actions güncellemelerini haftalık kontrol eder. Yayınlar [etiket workflow'u](.github/workflows/publish.yml) ve npm trusted publishing ile yapılır.
+[CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), [SECURITY.md](SECURITY.md) ve [CHANGELOG.md](CHANGELOG.md) dosyalarını okuyun. [Hata bildirimi](.github/ISSUE_TEMPLATE/bug_report.yml) veya [özellik isteği](.github/ISSUE_TEMPLATE/feature_request.yml) formunu kullanın; [PR kontrol listesini](.github/PULL_REQUEST_TEMPLATE.md) ve [bildirim yönlendirmesini](.github/ISSUE_TEMPLATE/config.yml) izleyin. [Dependabot](.github/dependabot.yml) npm ve Actions güncellemelerini aylık (gruplu) kontrol eder. Yayınlar [etiket workflow'u](.github/workflows/publish.yml) ve npm trusted publishing ile yapılır.
 
 ## Lisans
 

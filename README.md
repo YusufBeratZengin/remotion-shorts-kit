@@ -321,7 +321,7 @@ npx remotion compositions src/index.ts
 
 ## Contributing
 
-Read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), [SECURITY.md](SECURITY.md), and [CHANGELOG.md](CHANGELOG.md). Use the [bug report](.github/ISSUE_TEMPLATE/bug_report.yml) or [feature request](.github/ISSUE_TEMPLATE/feature_request.yml) forms, follow the [PR checklist](.github/PULL_REQUEST_TEMPLATE.md), and see the [issue routing](.github/ISSUE_TEMPLATE/config.yml). [Dependabot](.github/dependabot.yml) checks npm and Actions weekly. Releases use the [tag workflow](.github/workflows/publish.yml) and npm trusted publishing.
+Read [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), [SECURITY.md](SECURITY.md), and [CHANGELOG.md](CHANGELOG.md). Use the [bug report](.github/ISSUE_TEMPLATE/bug_report.yml) or [feature request](.github/ISSUE_TEMPLATE/feature_request.yml) forms, follow the [PR checklist](.github/PULL_REQUEST_TEMPLATE.md), and see the [issue routing](.github/ISSUE_TEMPLATE/config.yml). [Dependabot](.github/dependabot.yml) checks npm and Actions monthly (grouped). Releases use the [tag workflow](.github/workflows/publish.yml) and npm trusted publishing.
 
 ## License
 

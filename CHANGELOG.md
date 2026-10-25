@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - JSON-driven `SceneRenderer` and `ExplainerShort`, with 20-second thermos and 15-second siphon examples.
 - Local `shorts-kit validate` and `words-to-timeline` commands with a synthetic Whisper fixture.
 - Component rendering, CLI, invalid-timeline, and missing-asset tests; V8 coverage in `npm test` with 85% lines/statements and 80% branches/functions per helper/schema file.
-- Linux/Windows CI on Node 20/22/24, a render-smoke artifact, community templates, weekly dependency updates, and a maintainer-controlled trusted npm publishing workflow.
+- Linux/Windows CI on Node 20/22/24, a render-smoke artifact, community templates, monthly grouped dependency updates, and a maintainer-controlled trusted npm publishing workflow.
 - Actual GIF demo, a terminal SVG with a rerunnable CLI-output generator, synchronized English/Turkish usage guides, and release instructions.
 - JavaScript/TypeScript CodeQL scanning and CI checks for generated-demo drift.
 
