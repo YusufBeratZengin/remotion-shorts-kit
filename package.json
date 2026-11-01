@@ -72,9 +72,9 @@
   "devDependencies": {
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "remotion": "4.0.537",
+    "remotion": "4.0.539",
     "@biomejs/biome": "1.9.4",
-    "@remotion/cli": "4.0.537",
+    "@remotion/cli": "4.0.539",
     "@types/node": "20.17.19",
     "@types/react": "18.3.12",
     "@types/react-dom": "18.3.1",
